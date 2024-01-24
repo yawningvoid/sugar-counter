@@ -1,12 +1,14 @@
-import React from 'react'
+import { useState } from 'react'
 import './index.scss'
 import { useAppDispatch } from '../store/hooks'
-import { setModalVisible } from '../store/itemSlice'
+import { setModalVisible, setLastPressedItemId } from '../store/itemSlice'
+
 
 export interface ItemObject {
   id: number,
   emoji: string, 
   name: string,
+  description?: string,
   sugarPerPiece: number,
   pieces: number,
  }
@@ -16,16 +18,18 @@ export interface ItemProps extends Partial<ItemObject> {
   onClick: (event: React.MouseEvent<HTMLButtonElement>) => void,
 }
 
-const Item: React.FC<ItemProps> = ( {name, emoji, selected=false, onClick} ) => {
-  const [isDropdownVisible, setDropdownVisible] = React.useState(false)
-  const [isHovered, setHovered] = React.useState(false)
+const Item: React.FC<ItemProps> = ( {id, name, emoji, description, selected=false, onClick} ) => {
+  const [isDropdownVisible, setDropdownVisible] = useState(false)
+  const [isHovered, setHovered] = useState(false)
   const dispatch = useAppDispatch()
   const threeVerticalDots = "\u22EE"
 
-  const handleEditClick = () => {
+  const handleEditClick = (itemId : number) => {
     setDropdownVisible(false)
+    setHovered(false)
     dispatch(setModalVisible())
-  };
+    dispatch(setLastPressedItemId(itemId))
+  }
 
   return (
     <>
@@ -37,6 +41,7 @@ const Item: React.FC<ItemProps> = ( {name, emoji, selected=false, onClick} ) => 
       >
         <span className="emoji">{emoji}</span>
           {name}
+          <div className="description">{description}</div>
           { isHovered && 
           <div
             className="item--actions"
@@ -46,9 +51,9 @@ const Item: React.FC<ItemProps> = ( {name, emoji, selected=false, onClick} ) => 
             }}
           >
             {threeVerticalDots}
-            {isDropdownVisible && 
+            {isDropdownVisible && id &&
               <div className="item-dropdown">
-                <div className="item-dropdown-button" onClick={handleEditClick} onMouseLeave={() => setDropdownVisible(false)}>Edit</div>
+                <div className="item-dropdown-button" onClick={() => handleEditClick(id)} onMouseLeave={() => setDropdownVisible(false)}>Edit</div>
               </div>
             }
           </div>}

@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import './App.scss'
 import {
   QueryClient,
@@ -6,55 +5,26 @@ import {
 } from 'react-query'
 import Item, { ItemObject } from './Item'
 import Modal from './Item/Modal/index'
-
-
-const initialItems = [
-  { 
-    id: 1,
-    emoji: '🍰', 
-    name: 'cake',
-    sugarPerPiece: 5,
-    pieces: 1,
-   },
-  { 
-    id: 2,
-    emoji: '🍪', 
-    name: 'cookie',
-    sugarPerPiece: 5,
-    pieces: 1,
-   },
-  { 
-    id: 3,
-    emoji: '🍦', 
-    name: 'ice-cream',
-    sugarPerPiece: 5,
-    pieces: 1,
-   },
-]
+import { useAppDispatch, useAppSelector } from './store/hooks'
+import { addSelectedItem, removeSelectedItem } from './store/itemSlice'
 
 function App() {
   const queryClient = new QueryClient()
-  const [selectedItems, setSelectedItems] = useState<ItemObject[]>([])
-  const [items, setItems] = useState<ItemObject[]>(initialItems)
+  const initialItems = useAppSelector(state => state.item.initialItems)
+  const selectedItems = useAppSelector(state => state.item.selectedItems)
+  const dispatch = useAppDispatch()
 
   const handleSelectItem = (itemId: number) => {
-    const itemToSelect: ItemObject | undefined = items.find(
+    const itemToSelect: ItemObject | undefined = initialItems.find(
       (item) => item.id === itemId
     )
     if (itemToSelect) {
-      setSelectedItems((prevSelectedItems) => [...prevSelectedItems, itemToSelect])
-      setItems((prevItems) => prevItems.filter((item) => item.id !== itemId))
+      dispatch(addSelectedItem(itemToSelect))
     }
   }
-  
+
   const handleDeselectItem = (itemId: number) => {
-    setSelectedItems((prevSelectedItems) => prevSelectedItems.filter((item) => item.id !== itemId))
-    const itemToRestore: ItemObject | undefined = selectedItems.find(
-      (item) => item.id === itemId
-    )
-    if (itemToRestore) {
-      setItems((prevItems) => [...prevItems, itemToRestore])
-    }
+    dispatch(removeSelectedItem(itemId))
   }
 
   return (
@@ -64,24 +34,28 @@ function App() {
       
       <div className="container">
         <h1>What sweets did you have today?</h1>
-        <input/>
+        <input id="search"/>
         <div className="container-items">
           {selectedItems.map((item)=> 
             <Item 
               selected 
               key={item.id} 
+              id={item.id}
               name={item.name} 
               emoji={item.emoji} 
+              description={item.description}
               onClick={()=> handleDeselectItem(item.id)} 
             />)
           }
         </div>
         <div className="container-items">
-          {items.map((item)=> 
+          {initialItems.map((item)=> 
             <Item 
               key={item.id} 
+              id={item.id}
               name={item.name} 
               emoji={item.emoji} 
+              description={item.description}
               onClick={()=> handleSelectItem(item.id)} 
             />)
           }
