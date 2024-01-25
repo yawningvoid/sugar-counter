@@ -11,6 +11,7 @@ export interface ItemObject {
   description?: string,
   sugarPerPiece: number,
   pieces: number,
+  isInitial: boolean,
  }
 
 export interface ItemProps extends Partial<ItemObject> {

@@ -1,30 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { ItemObject } from '../Item'
+import { initialItems } from './initialItems'
 
-export const initialItems = [
-    { 
-      id: 1,
-      emoji: '🍰', 
-      name: 'cake',
-      description: 'big cake very very big cake even bigger',
-      sugarPerPiece: 5,
-      pieces: 1,
-     },
-    { 
-      id: 2,
-      emoji: '🍪', 
-      name: 'cookie',
-      sugarPerPiece: 5,
-      pieces: 1,
-     },
-    { 
-      id: 3,
-      emoji: '🍦', 
-      name: 'ice-cream',
-      sugarPerPiece: 5,
-      pieces: 1,
-     },
-  ]
   
 
 interface CounterState {

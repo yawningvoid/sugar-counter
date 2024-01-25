@@ -19,6 +19,7 @@ const Modal: React.FC = () => {
     emoji: '',
     sugarPerPiece: 0,
     pieces: 0,
+    isInitial: false,
   }
 
   const [itemToEdit, setItemToEdit] = useState<ItemObject>(shallowItem)

@@ -1,0 +1,51 @@
+  
+  export const initialItems = [
+    // Sweets
+    { id: 1, emoji: '🍩', name: 'doughnut', sugarPerPiece: 11, pieces: 1, isInitial: true },
+    { id: 2, emoji: '🍪', name: 'cookie', sugarPerPiece: 7, pieces: 1, isInitial: true },
+    { id: 3, emoji: '🍫', name: 'chocolate bar', sugarPerPiece: 24, pieces: 1, isInitial: true },
+    { id: 4, emoji: '🍬', name: 'candy', sugarPerPiece: 6, pieces: 1, isInitial: true },
+    { id: 5, emoji: '🍭', name: 'lollipop', sugarPerPiece: 10, pieces: 1, isInitial: true },
+    { id: 6, emoji: '🍮', name: 'custard', sugarPerPiece: 21, pieces: 1, isInitial: true },
+    { id: 7, emoji: '🍰', name: 'shortcake', sugarPerPiece: 21, pieces: 1, isInitial: true },
+    { id: 8, emoji: '🎂', name: 'cake', sugarPerPiece: 30, pieces: 1, isInitial: true },
+    { id: 9, emoji: '🧁', name: 'cupcake', sugarPerPiece: 21, pieces: 1, isInitial: true },
+    { id: 10, emoji: '🥧', name: 'pie', sugarPerPiece: 20, pieces: 1, isInitial: true },
+    { id: 11, emoji: '🍨', name: 'ice cream', sugarPerPiece: 28, pieces: 1, isInitial: true },
+    { id: 12, emoji: '🍧', name: 'shaved ice', sugarPerPiece: 27, pieces: 1, isInitial: true },
+    { id: 13, emoji: '🍦', name: 'soft ice cream', sugarPerPiece: 28, pieces: 1, isInitial: true },
+    { id: 14, emoji: '🥠', name: 'fortune cookie', sugarPerPiece: 3, pieces: 1, isInitial: true },
+    { id: 15, emoji: '🍡', name: 'dango', sugarPerPiece: 8, pieces: 1, isInitial: true },
+    // Drinks
+    { id: 16, emoji: '🍹', name: 'cocktail', sugarPerPiece: 20, pieces: 1, isInitial: true },
+    { id: 17, emoji: '🍸', name: 'alcohol', sugarPerPiece: 1, pieces: 1, isInitial: true },
+    { id: 18, emoji: '🥃', name: 'alcohol', sugarPerPiece: 1, pieces: 1, isInitial: true },
+    { id: 19, emoji: '🥤', name: 'soft drink', sugarPerPiece: 39, pieces: 1, isInitial: true },
+    { id: 20, emoji: '🧃', name: 'juice', sugarPerPiece: 20, pieces: 1, isInitial: true },
+    { id: 21, emoji: '🍷', name: 'wine', sugarPerPiece: 1, pieces: 1, isInitial: true },
+    { id: 22, emoji: '🍾', name: 'champagne', sugarPerPiece: 1, pieces: 1, isInitial: true },
+    { id: 23, emoji: '🥛', name: 'yogurt', sugarPerPiece: 10, pieces: 1, isInitial: true },
+    { id: 24, emoji: '🧋', name: 'bubble tea', sugarPerPiece: 38, pieces: 1, isInitial: true },
+    { id: 25, emoji: '☕', name: 'coffee', sugarPerPiece: 5, pieces: 1, isInitial: true },
+    { id: 26, emoji: '☕', name: 'tea', sugarPerPiece: 5, pieces: 1, isInitial: true },
+    // Foods with added sugar
+    { id: 27, emoji: '🍔', name: 'burger', sugarPerPiece: 5, pieces: 1, isInitial: true },
+    { id: 28, emoji: '🍕', name: 'pizza', sugarPerPiece: 4, pieces: 1, isInitial: true },
+    { id: 29, emoji: '🌭', name: 'hotdog', sugarPerPiece: 2, pieces: 1, isInitial: true },
+    { id: 30, emoji: '🥪', name: 'sandwich', sugarPerPiece: 3, pieces: 1, isInitial: true },
+    { id: 31, emoji: '🍝', name: 'spaghetti', sugarPerPiece: 1, pieces: 1, isInitial: true },
+    { id: 32, emoji: '🍿', name: 'popcorn', sugarPerPiece: 1, pieces: 1, isInitial: true },
+    { id: 33, emoji: '🥐', name: 'croissant', sugarPerPiece: 5, pieces: 1, isInitial: true },
+    { id: 34, emoji: '🥞', name: 'pancake', sugarPerPiece: 10, pieces: 1, isInitial: true },
+    { id: 35, emoji: '🧇', name: 'waffle', sugarPerPiece: 10, pieces: 1, isInitial: true },
+    { id: 36, emoji: '🍶', name: 'sauce', sugarPerPiece: 10, pieces: 1, isInitial: true },
+    { id: 37, emoji: '🥜', name: 'granola', sugarPerPiece: 6, pieces: 1, isInitial: true },
+    { id: 38, emoji: '🥣', name: 'cereal', sugarPerPiece: 10, pieces: 1, isInitial: true },
+    { id: 39, emoji: '🥫', name: 'ketchup', sugarPerPiece: 10, pieces: 1, isInitial: true },
+    { id: 40, emoji: '🍯', name: 'honey', sugarPerPiece: 17, pieces: 1, isInitial: true },
+    // Other
+    { id: 41, emoji: '🥄', name: 'other', sugarPerPiece: 5, pieces: 1, isInitial: true },
+    { id: 42, emoji: '🧊', name: 'other', sugarPerPiece: 5, pieces: 1, isInitial: true },
+  ]
+  
+  
