@@ -17,13 +17,17 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  &--modal {
+    overflow: hidden;
+  }
 }
 
 .card {
   padding: 2em;
 }
 
-.read-the-docs {
+.intro {
   color: $light-2;
   font-weight: 400;
 }
@@ -38,7 +42,21 @@
 .container-items {
   display: flex;
   margin-top: 30px;
+  margin-bottom: 30px;
   flex-wrap: wrap;
   row-gap: 10px;
   column-gap: 10px;
+}
+
+.counter {
+  display: flex;
+  padding: 10px;
+  background-color: white;
+  border: 3px solid $vivid ;
+  border-radius: 50%;
+  width:50px;
+  height: 50px;
+  margin-left: auto;
+  justify-content: center;
+  align-items: center;
 }
