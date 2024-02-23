@@ -1,0 +1,16 @@
+@import '../../variables';
+
+.day {
+	font-size: 30px;
+	min-width: fit-content;
+	min-height: fit-content;
+	align-self: center;
+
+	&--disabled {
+	filter: grayscale(100%);
+	}
+
+	&--goal-success {
+		font-size: 60px;
+	}
+}

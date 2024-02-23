@@ -6,35 +6,43 @@ import {
 import Item, { ItemObject } from './Item'
 import Modal from './Item/Modal/index'
 import { useAppDispatch, useAppSelector } from './store/hooks'
-import { addSelectedItem, removeSelectedItem } from './store/itemSlice'
+import { addNewDayCustomItems, addSelectedItem, editCalendarYesterday, removeSelectedItem } from './store/itemSlice'
 import { useState } from 'react'
-import { useClearLocalStorageEffect } from './utils/localStorage'
+import Calendar from './Calendar'
 
 function App() {
   const queryClient = new QueryClient()
   const initialItems = useAppSelector(state => state.item.initialItems)
   const selectedItems = useAppSelector(state => state.item.selectedItems)
+  const isModalVisible = useAppSelector(state => state.item.isModalVisible)
+  const lastSavedDate = useAppSelector(state => state.item.lastSavedDate)
   const dispatch = useAppDispatch()
-  useClearLocalStorageEffect()
-  
+
   const counter = selectedItems.reduce((acc, currentValue)=> acc + currentValue.pieces * currentValue.sugarPerPiece, 0)
   
   const [searchQuery, setSearchQuery] = useState('')
-  
-  const filteredItems = initialItems.filter((item) =>
-  item.name.toLowerCase().includes(searchQuery.toLowerCase())
-  )
+  const filteredItems = initialItems.filter((item) => item.name.toLowerCase().includes(searchQuery.toLowerCase()))
 
-      const handleSelectItem = (itemId: number) => {
-        const itemToSelect: ItemObject | undefined = initialItems.find((item) => item.id === itemId)
-        if (itemToSelect) {
-          dispatch(addSelectedItem(itemToSelect))
-        }
-      }
-      
-      const handleDeselectItem = (itemId: number) => {
-        dispatch(removeSelectedItem(itemId))
-      }
+  const handleSelectItem = (itemId: string) => {
+    const itemToSelect: ItemObject | undefined = initialItems.find((item) => item.id === itemId)
+    if (itemToSelect) {
+      if (lastSavedDate !== new Date().toLocaleDateString()) {
+        dispatch(addNewDayCustomItems())
+        dispatch(editCalendarYesterday())
+      } 
+      // also has to run, user wants to have their item picked even if it's the next day
+        dispatch(addSelectedItem(itemToSelect))
+    }
+  }
+  
+  const handleDeselectItem = (itemId: string) => {
+    if (lastSavedDate !== new Date().toLocaleDateString()) {
+      dispatch(editCalendarYesterday())
+      dispatch(addNewDayCustomItems())
+    } else {
+      dispatch(removeSelectedItem(itemId))
+    }
+  }
       
   return (
     <QueryClientProvider client={queryClient}>
@@ -42,13 +50,20 @@ function App() {
       <Modal />
       
       <div className="container">
-        <div className="counter">{counter} g</div>
+        <div className="calendar-counter-container">
+          <div className="avatar">🙂</div>
+        </div>
+        <div className="calendar-counter-container">
+          <Calendar counter={counter}/>
+          <div className="counter">{counter} g</div>
+        </div>
         <h1>What sweets did you have today?</h1>
         <input 
           id="search"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           placeholder="search"
+          tabIndex={isModalVisible ? -1 : 0}
         />
        { selectedItems.length > 0 &&
         <div className="container-items">

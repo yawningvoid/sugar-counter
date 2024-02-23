@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useEffect, useState } from 'react'
 import './index.scss'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
-import { addNewItem, addSelectedItem, setModalVisible } from '../../store/itemSlice'
+import { createItem, addSelectedItem, setModalVisible } from '../../store/itemSlice'
 import { ItemObject } from '../index'
 
 const Modal: React.FC = () => {
@@ -13,7 +13,7 @@ const Modal: React.FC = () => {
   const dispatch = useAppDispatch()
 
   const shallowItem = {
-    id: 0,
+    id: '',
     name: '',
     description: '',
     emoji: '',
@@ -37,23 +37,36 @@ const Modal: React.FC = () => {
       [id]: id === 'sugarPerPiece' || id === 'pieces' ? parseInt(value, 10) : value,
     }))
   }
-  
-  const findMaxId = (items: ItemObject[]): number => {
-    return items.reduce((maxId, item) => (item.id > maxId ? item.id : maxId), 0);
-  }
 
   const handleAddItem = () => {
-    const maxId = Math.max(findMaxId(initialItems), findMaxId(selectedItems))
     const newItem = {
       ...itemToEdit,
-      id: maxId + 1,
+      isInitial: false,
+      id: self.crypto.randomUUID(),
     }
-  
-    dispatch(addNewItem(newItem))
+    dispatch(createItem(newItem))
     dispatch(addSelectedItem(newItem))
-  
     dispatch(setModalVisible())
   }
+
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLButtonElement>) => {
+    if (event.code === 'Enter') {
+      handleAddItem()
+    }
+  }
+
+  const handleKeyEsc = (event: KeyboardEvent) => {
+    if (event.key === 'Escape') {
+      dispatch(setModalVisible())
+    }
+  }
+
+  useEffect (()=> {
+    document.addEventListener('keyup', handleKeyEsc)
+    return () => {
+      document.removeEventListener('keyup', handleKeyEsc)
+    }
+  }, [])
 
   return (
     <>
@@ -70,6 +83,7 @@ const Modal: React.FC = () => {
                 id="name" 
                 value={itemToEdit?.name || ''}
                 onChange={handleInputChange}
+                tabIndex={0}
               />
             </label>
             <label>
@@ -87,7 +101,7 @@ const Modal: React.FC = () => {
                 type="number"
                 id="sugarPerPiece"
                 value={itemToEdit?.sugarPerPiece || 0}
-                onChange={(e)=>handleInputChange(e)}
+                onChange={handleInputChange}
               />
             </label>
             <label>
@@ -96,11 +110,13 @@ const Modal: React.FC = () => {
                 type="number"
                 id="pieces"
                 value={itemToEdit?.pieces || 0} 
-                onChange={(e)=>handleInputChange(e)}
+                onChange={handleInputChange}
               />
             </label>
-            <button onClick={handleAddItem}>Add Item</button>
-            <button onClick={() => {dispatch(setModalVisible())}}>Cancel</button>
+            <div className="modal-content--button-container">
+              <button onClick={handleAddItem} onKeyUp={handleKeyPress}>Add Item</button>
+              <button onClick={() => {dispatch(setModalVisible())}}>Cancel</button>
+            </div>
           </div>
         </div>
       </div>

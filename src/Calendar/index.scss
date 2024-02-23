@@ -1,0 +1,7 @@
+@import '../variables';
+
+.calendar {
+	display: flex;
+	min-width: 600px;
+	justify-content: space-between;
+}
