@@ -3,18 +3,23 @@ import { ItemObject } from '../Item'
 import { initialItems } from './initialItems'
 import useLocalStorage from '../utils/useLocalStorage'
 import { CalendarEntry } from '../Calendar'
+import { differenceInCalendarDays } from "date-fns"
 
 interface CounterState {
-  value: number
-  isModalVisible: boolean
+  isEditGoalModalVisible: boolean
+  isEditItemModalVisible: boolean
   initialItems: ItemObject[]
   selectedItems: ItemObject[]
   lastPressedItemId: string | null
   lastSavedDate: string | null
   calendar: CalendarEntry[]
+  goal: number
 }
 
-const { clearLocalStorageItem, getFromLocalStorage, saveToLocalStorage } = useLocalStorage()
+const { 
+  getFromLocalStorage, 
+  saveToLocalStorage 
+} = useLocalStorage()
 
 const initialItemsFromLocalStorage = getFromLocalStorage<ItemObject[]>('initialItems') || initialItems
 const selectedItemsFromLocalStorage = getFromLocalStorage<ItemObject[]>('selectedItems') || []
@@ -33,21 +38,25 @@ const initialCalendar: CalendarEntry[] = Array.from({ length: 7 }, (_, index) =>
 const calendarFromLocalStorage = getFromLocalStorage<CalendarEntry[]>('calendar') || initialCalendar
 
 const initialState: CounterState = {
-  value: 0,
-  isModalVisible: false,
+  isEditGoalModalVisible: false,
+  isEditItemModalVisible: false,
   initialItems: initialItemsFromLocalStorage,
   selectedItems: selectedItemsFromLocalStorage,
   lastPressedItemId:  null,
   lastSavedDate: lastSavedDateFromLocalStorage,
   calendar: calendarFromLocalStorage,
+  goal: 25,
 }
 
 const itemSlice = createSlice({
   name: 'item',
   initialState,
   reducers: {
-    setModalVisible: (state) => {
-      state.isModalVisible = !state.isModalVisible
+    setEditGoalModalVisible: (state) => {
+      state.isEditGoalModalVisible = !state.isEditGoalModalVisible
+    },
+    setEditItemModalVisible: (state) => {
+      state.isEditItemModalVisible = !state.isEditItemModalVisible
     },
     createItem: (state, action: PayloadAction<ItemObject>) => {
       state.initialItems.push(action.payload)
@@ -90,26 +99,22 @@ const itemSlice = createSlice({
       const newItems = [...newInitialItems, ...newSelectedItems]
       if (newItems.length > 0) {
         state.initialItems = [...initialItems,  ...newItems]
-        state.selectedItems = []
-        state.lastSavedDate = new Date().toLocaleDateString()
-        saveToLocalStorage('initialItems', state.initialItems)
-        saveToLocalStorage('selectedItems', [])
-        saveToLocalStorage('lastModifiedTimestamp', dateObject)
       } else {
         state.initialItems = [...initialItems]
-        state.selectedItems = []
-        state.lastSavedDate = new Date().toLocaleDateString()
-        clearLocalStorageItem('initialItems')
-        clearLocalStorageItem('selectedItems')
-        saveToLocalStorage('lastModifiedTimestamp', dateObject)
       }
+      state.selectedItems = []
+      state.lastSavedDate = new Date().toLocaleDateString()
+      saveToLocalStorage('initialItems', state.initialItems)
+      saveToLocalStorage('selectedItems', [])
+      saveToLocalStorage('lastModifiedTimestamp', dateObject)
     },
     setLastPressedItemId: (state, action: PayloadAction<string | null>) => {
       state.lastPressedItemId = action.payload
     },
     editCalendarYesterday: (state) => {
-      const calendarDate = new Date(state.calendar[6].date)
-      const daysDifference = new Date().getDate() - calendarDate.getDate() - 1
+      const calendarDate = state.calendar[6].date
+      const currentDate = new Date().toLocaleDateString()
+      const daysDifference = differenceInCalendarDays(currentDate, calendarDate) 
       const newArray: CalendarEntry[] = Array.from({ length: daysDifference }, (_, index) => {
         const currentDate = new Date()
         currentDate.setDate(currentDate.getDate() - (daysDifference - (index + 1)))
@@ -129,19 +134,24 @@ const itemSlice = createSlice({
       state.calendar = newArray
       saveToLocalStorage('calendar', state.calendar)
     },
+    setGoal: (state, action: PayloadAction<number>) => {
+      state.goal = action.payload
+    },
   },
 })
 
 export const { 
   createItem, 
-  setModalVisible, 
+  setEditGoalModalVisible, 
+  setEditItemModalVisible, 
   removeSelectedItem, 
   addSelectedItem, 
   setLastPressedItemId, 
   removeItem, 
   addNewDayCustomItems, 
   editCalendarYesterday,
-  editCalendarToday
+  editCalendarToday,
+  setGoal
  } 
  = itemSlice.actions
 export const itemReducer = itemSlice.reducer

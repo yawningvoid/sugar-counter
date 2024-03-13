@@ -1,3 +1,4 @@
+import { useAppSelector } from '../../store/hooks'
 import './index.scss'
 
 interface DayProps {
@@ -7,7 +8,7 @@ interface DayProps {
 
 const Day: React.FC<DayProps> = ({sugarCounter, hasValue}) => {
   let fontSize = '30px'
-  const goal = 25
+  const goal = useAppSelector(state => state.item.goal)
   if (sugarCounter) {
     if (sugarCounter && sugarCounter <= goal) {
       fontSize = '30px'

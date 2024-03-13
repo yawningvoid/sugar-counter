@@ -1,9 +1,5 @@
 
 export default function useLocalStorage () {
-  function clearLocalStorageItem(key:string) {
-    localStorage.removeItem(key)
-  }
-  
   function getFromLocalStorage<T>(key: string): T | null {
     enum Key {
       LIST = 'list',
@@ -41,7 +37,6 @@ export default function useLocalStorage () {
   }
 
   return {
-    clearLocalStorageItem,
     getFromLocalStorage,
     saveToLocalStorage
   }

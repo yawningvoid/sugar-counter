@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from '../store/hooks'
-import { editCalendarToday } from '../store/itemSlice'
+import { addNewDayCustomItems, editCalendarToday, editCalendarYesterday } from '../store/itemSlice'
 import Day from './Day'
 import './index.scss'
 import { useEffect } from 'react'
@@ -17,10 +17,16 @@ interface CalendarProps {
 const Calendar: React.FC<CalendarProps> = ({ counter }) => {
   const dispatch = useAppDispatch()
   const calendar = useAppSelector(state => state.item.calendar)
+  const lastSavedDate = useAppSelector(state => state.item.lastSavedDate)
 
   useEffect(() => { 
-    dispatch(editCalendarToday(counter))
-  }, [counter])
+    if (lastSavedDate !== new Date().toLocaleDateString()) {
+      dispatch(editCalendarYesterday())
+      dispatch(addNewDayCustomItems())
+    } else {
+      dispatch(editCalendarToday(counter))
+    }
+  }, [counter, lastSavedDate])
 
   return (
     <>

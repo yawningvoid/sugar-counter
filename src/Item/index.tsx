@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import './index.scss'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
-import { setModalVisible, setLastPressedItemId, removeItem } from '../store/itemSlice'
+import { setLastPressedItemId, removeItem, setEditItemModalVisible } from '../store/itemSlice'
+import Dropdown from '../components/Dropdown'
 
 
 export interface ItemObject {
@@ -23,24 +24,29 @@ const Item: React.FC<ItemProps> = ( {id, name, emoji, description, selected=fals
   const [isDropdownVisible, setDropdownVisible] = useState(false)
   const [isHovered, setHovered] = useState(false)
   const dispatch = useAppDispatch()
-  const isModalVisible = useAppSelector(state => state.item.isModalVisible)
+  const isEditItemModalVisible = useAppSelector(state => state.item.isEditItemModalVisible)
   const initialItems = useAppSelector(state => state.item.initialItems)
   const selectedItems = useAppSelector(state => state.item.selectedItems)
 
   const items =  initialItems.concat(selectedItems)
-  const isInitial = (id: string) => items.find((item)=> id === item.id)?.isInitial
+  const isInitial = (id: string = '') => items.find((item) => id === item.id)?.isInitial
 
   const threeVerticalDots = "\u22EE"
 
   const handleEdit = (itemId : string) => {
     setDropdownVisible(false)
     setHovered(false)
-    dispatch(setModalVisible())
+    dispatch(setEditItemModalVisible())
     dispatch(setLastPressedItemId(itemId))
   }
   const handleDelete = (itemId : string) => {
     dispatch(removeItem(itemId))
   }
+
+  const buttons = [
+    {label: 'Edit', onClick: () => handleEdit(id ?? '')},
+    {label: 'Delete', onClick: () => handleDelete(id ?? ''), show: !isInitial(id)},
+  ]
 
   return (
     <>
@@ -49,27 +55,25 @@ const Item: React.FC<ItemProps> = ( {id, name, emoji, description, selected=fals
         onClick={onClick} 
         onMouseEnter={() => setHovered(true)} 
         onMouseLeave={() => {setHovered(false); setDropdownVisible(false)}}
-        tabIndex={isModalVisible ? -1 : 0}
+        tabIndex={isEditItemModalVisible ? -1 : 0}
       >
         <span className="emoji">{emoji}</span>
           <div className="name">{name}</div>
           <div className="description">{description}</div>
           { isHovered && 
-          <div
-            className="item--actions"
-            onClick={(e) => {
-              e.stopPropagation() 
-              setDropdownVisible(!isDropdownVisible)
-            }}
-          >
-            {threeVerticalDots}
-            {isDropdownVisible && id &&
-              <div className="item-dropdown" onMouseLeave={() => setDropdownVisible(false)}>
-                <div className="item-dropdown-button" onClick={() => handleEdit(id)}>Edit</div>
-                {!isInitial(id) && <div className="item-dropdown-button" onClick={() => handleDelete(id)}>Delete</div>}
-              </div>
-            }
-          </div>}
+            <div
+              className="item--actions"
+              onClick={(e) => {
+                e.stopPropagation() 
+                setDropdownVisible(!isDropdownVisible)
+              }}
+            >
+              {threeVerticalDots}
+              {isDropdownVisible && 
+                <Dropdown buttons={buttons}/>
+              }
+            </div>
+          }
       </button>
     </>
   )
