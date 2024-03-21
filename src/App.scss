@@ -59,6 +59,12 @@
   margin-left: auto;
   justify-content: center;
   align-items: center;
+
+  @media (max-width: 750px) {
+    margin: 0;
+    width: 40px;
+    height: 40px;
+  }
 }
 
 .avatar {
@@ -73,8 +79,26 @@
     transform: translate(-50%, -50%);
     z-index: 100;
   }
+
+  @media (max-width: 750px) {
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
 }
 
-.header-container {
+.avatar-container {
   display: flex;
+  position: relative;
+}
+
+.calendar-counter-container {
+  display: flex;
+
+  @media (max-width: 750px) {
+    flex-direction: column-reverse;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  }
 }

@@ -54,7 +54,7 @@ function App() {
       {isEditItemModalVisible && <EditItemModal/>}
       <div className="container">
         <div onMouseLeave={() => setDropdownVisible(false)}>
-          <div className="header-container">
+          <div className="avatar-container">
             <div className="avatar" onClick={() => setDropdownVisible(!isDropdownVisible)}>
               🙂
               {isDropdownVisible && 
@@ -62,7 +62,7 @@ function App() {
               }
             </div>
           </div>
-          <div className="header-container">
+          <div className="calendar-counter-container">
             <Calendar counter={counter}/>
             <div className="counter">{counter} g</div>
           </div>

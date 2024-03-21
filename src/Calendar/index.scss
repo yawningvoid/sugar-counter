@@ -4,4 +4,8 @@
 	display: flex;
 	min-width: 600px;
 	justify-content: space-between;
+	
+	@media (max-width: 750px) {
+		min-width: 100%;
+	}
 }

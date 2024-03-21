@@ -1,8 +1,9 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import './index.scss'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
 import { setLastPressedItemId, removeItem, setEditItemModalVisible } from '../store/itemSlice'
 import Dropdown from '../components/Dropdown'
+import useLongPress from '../utils/useLongPress'
 
 
 export interface ItemObject {
@@ -17,7 +18,7 @@ export interface ItemObject {
 
 export interface ItemProps extends Partial<ItemObject> {
   selected?: boolean,
-  onClick: (event: React.MouseEvent<HTMLButtonElement>) => void,
+  onClick: (id: string) => void,
 }
 
 const Item: React.FC<ItemProps> = ( {id, name, emoji, description, selected=false, onClick} ) => {
@@ -32,10 +33,17 @@ const Item: React.FC<ItemProps> = ( {id, name, emoji, description, selected=fals
   const isInitial = (id: string = '') => items.find((item) => id === item.id)?.isInitial
 
   const threeVerticalDots = "\u22EE"
+  const { action, handlers } = useLongPress()
+  useEffect(() => {
+    if (action === 'click') {
+      onClick(id ?? '')
+    } else if (action === 'longpress') {
+      setDropdownVisible(true)
+    }
+  }, [action])
 
   const handleEdit = (itemId : string) => {
     setDropdownVisible(false)
-    setHovered(false)
     dispatch(setEditItemModalVisible())
     dispatch(setLastPressedItemId(itemId))
   }
@@ -52,20 +60,23 @@ const Item: React.FC<ItemProps> = ( {id, name, emoji, description, selected=fals
     <>
       <button 
         className={`item ${selected ? '' : 'item--disabled'}`} 
-        onClick={onClick} 
         onMouseEnter={() => setHovered(true)} 
-        onMouseLeave={() => {setHovered(false); setDropdownVisible(false)}}
+        onMouseLeave={()=>{
+          setDropdownVisible(false)
+          setHovered(false)
+        }}
+        {...handlers}
         tabIndex={isEditItemModalVisible ? -1 : 0}
       >
         <span className="emoji">{emoji}</span>
           <div className="name">{name}</div>
           <div className="description">{description}</div>
-          { isHovered && 
+          {isHovered && 
             <div
               className="item--actions"
               onClick={(e) => {
                 e.stopPropagation() 
-                setDropdownVisible(!isDropdownVisible)
+                setDropdownVisible((isDropdownVisible) => !isDropdownVisible)
               }}
             >
               {threeVerticalDots}
