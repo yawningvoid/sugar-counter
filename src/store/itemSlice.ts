@@ -5,6 +5,8 @@ import useLocalStorage from '../utils/useLocalStorage'
 import { CalendarEntry } from '../Calendar'
 import { differenceInCalendarDays } from "date-fns"
 
+export type Measurement = 'tsp' | 'g'
+
 interface CounterState {
   isEditGoalModalVisible: boolean
   isEditItemModalVisible: boolean
@@ -14,6 +16,7 @@ interface CounterState {
   lastSavedDate: string | null
   calendar: CalendarEntry[]
   goal: number
+  measurement: Measurement
 }
 
 const { 
@@ -46,6 +49,7 @@ const initialState: CounterState = {
   lastSavedDate: lastSavedDateFromLocalStorage,
   calendar: calendarFromLocalStorage,
   goal: 25,
+  measurement: 'g',
 }
 
 const itemSlice = createSlice({
@@ -54,7 +58,7 @@ const itemSlice = createSlice({
   reducers: {
     setEditGoalModalVisible: (state) => {
       state.isEditGoalModalVisible = !state.isEditGoalModalVisible
-    },
+    },  
     setEditItemModalVisible: (state) => {
       state.isEditItemModalVisible = !state.isEditItemModalVisible
     },
@@ -137,6 +141,9 @@ const itemSlice = createSlice({
     setGoal: (state, action: PayloadAction<number>) => {
       state.goal = action.payload
     },
+    switchMeasurement: (state, action: PayloadAction<'tsp' | 'g'>) => {
+      state.measurement = action.payload;
+    },
   },
 })
 
@@ -151,7 +158,8 @@ export const {
   addNewDayCustomItems, 
   editCalendarYesterday,
   editCalendarToday,
-  setGoal
+  setGoal,
+ switchMeasurement
  } 
  = itemSlice.actions
 export const itemReducer = itemSlice.reducer

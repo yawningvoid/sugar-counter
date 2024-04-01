@@ -14,6 +14,7 @@ function App() {
   const isEditGoalModalVisible = useAppSelector(state => state.item.isEditGoalModalVisible)
   const isEditItemModalVisible = useAppSelector(state => state.item.isEditItemModalVisible)
   const lastSavedDate = useAppSelector(state => state.item.lastSavedDate)
+  const measurement = useAppSelector(state => state.item.measurement)
 
   const dispatch = useAppDispatch()
 
@@ -64,7 +65,7 @@ function App() {
           </div>
           <div className="calendar-counter-container">
             <Calendar counter={counter}/>
-            <div className="counter">{counter} g</div>
+            <div className="counter">{counter} {measurement}</div>
           </div>
         </div>
         <h1>What sweets did you have today?</h1>

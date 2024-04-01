@@ -1,4 +1,4 @@
-import React, {  useEffect } from 'react'
+import {  MouseEvent, useEffect } from 'react'
 import './index.scss'
 
 interface FormField {
@@ -6,6 +6,7 @@ interface FormField {
   label: string
   type: string
   value: string | number
+  options?: { label: string, value: string | number, onClick: (event: RadioChangeEvent)=>void }[] 
 }
 
 interface ModalProps {
@@ -16,6 +17,10 @@ interface ModalProps {
   setModalVisible: () => void
   okButtonText: string
   description?: string
+}
+
+export interface RadioChangeEvent extends MouseEvent<HTMLInputElement> {
+  target: HTMLInputElement
 }
 
 const Modal: React.FC<ModalProps> = ({ fields, onSubmit, onChange, isModalVisible, setModalVisible, okButtonText, description }) => {
@@ -46,18 +51,38 @@ const Modal: React.FC<ModalProps> = ({ fields, onSubmit, onChange, isModalVisibl
       >
         <div className="modal" onClick={(e) => {e.stopPropagation()}}>
           <div className="modal-content">
-            {fields.map(field => (
-              <label key={field.id}>
-                  {field.label}
-                  <input 
-                    type={field.type} 
-                    id={field.id} 
-                    value={field.value || ''}
-                    onChange={onChange}
-                    tabIndex={0}
-                    />
-                </label>
-              ))}
+          {fields.map(field => (
+            <label key={field.id}>
+              {field.label}
+              {field.type === 'radio' && field.options ? (
+                <div className="radio-container">
+
+                  {field.options.map((option, index) => (
+                    <div key={index}>
+                      <input 
+                        type={field.type} 
+                        id={`${field.id}-${index}`} 
+                        name={field.id}
+                        value={option.label}
+                        onClick={option.onClick}
+                        tabIndex={0}
+                        defaultChecked={field.value === option.value}
+                      />
+                      <label htmlFor={`${field.id}-${index}`}>{option.label}</label>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <input 
+                  type={field.type} 
+                  id={field.id} 
+                  value={field.value || ''}
+                  onChange={onChange}
+                  tabIndex={0}
+                />
+              )}
+            </label>
+          ))}
             { description && <div className="modal-content--description">{description}</div>}
             <div className="modal-content--button-container">
               <button onClick={onSubmit} onKeyUp={handleKeyPress}>{okButtonText}</button>
