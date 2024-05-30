@@ -3,6 +3,7 @@ import Modal from '../components/Modal/index'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
 import { addSelectedItem, createItem, setEditItemModalVisible } from '../store/itemSlice'
 import { useEffect, useState, ChangeEvent } from 'react'
+import { v4 as uuid } from 'uuid'
 
 function EditItemModal() {
   const initialItems = useAppSelector(state => state.item.initialItems)
@@ -42,7 +43,7 @@ function EditItemModal() {
     const newItem = {
       ...itemToEdit,
       isInitial: false,
-      id: self.crypto.randomUUID(),
+      id: uuid(),
     }
     dispatch(createItem(newItem))
     dispatch(addSelectedItem(newItem))

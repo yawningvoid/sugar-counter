@@ -15,11 +15,10 @@ function App() {
   const isEditItemModalVisible = useAppSelector(state => state.item.isEditItemModalVisible)
   const lastSavedDate = useAppSelector(state => state.item.lastSavedDate)
   const measurement = useAppSelector(state => state.item.measurement)
+  const counter = useAppSelector(state => state.item.counter)
 
   const dispatch = useAppDispatch()
 
-  const counter = selectedItems.reduce((acc, currentValue)=> acc + currentValue.pieces * currentValue.sugarPerPiece, 0)
-  
   const [searchQuery, setSearchQuery] = useState('')
   const [isDropdownVisible, setDropdownVisible] = useState(false)
   const buttons = [
@@ -64,7 +63,7 @@ function App() {
             </div>
           </div>
           <div className="calendar-counter-container">
-            <Calendar counter={counter}/>
+            <Calendar/>
             <div className="counter">{counter} {measurement}</div>
           </div>
         </div>

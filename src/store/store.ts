@@ -1,11 +1,23 @@
-import { configureStore } from '@reduxjs/toolkit'
+import { configureStore, combineReducers } from '@reduxjs/toolkit'
 import { itemReducer } from './itemSlice'
+import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
+import listenerMiddleware from './listenerMiddleware'
 
-export const store = configureStore({
-  reducer: {
-    item: itemReducer
-  }
+const rootReducer = combineReducers({
+  item: itemReducer
 })
 
-export type RootState = ReturnType<typeof store.getState>
-export type AppDispatch = typeof store.dispatch
+export const setupStore = (preloadedState?: Partial<RootState>) => {
+  return configureStore({
+    reducer: rootReducer,
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware().prepend(listenerMiddleware.middleware),
+    preloadedState
+  })
+}
+
+export type RootState = ReturnType<typeof rootReducer>
+export type AppStore = ReturnType<typeof setupStore>
+export type AppDispatch = AppStore['dispatch']
+
+export const useAppDispatch = () => useDispatch<AppDispatch>()
+export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector

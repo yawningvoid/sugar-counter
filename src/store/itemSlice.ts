@@ -4,10 +4,11 @@ import { initialItems } from './initialItems'
 import useLocalStorage from '../utils/useLocalStorage'
 import { CalendarEntry } from '../Calendar'
 import { differenceInCalendarDays } from "date-fns"
+import { v4 as uuid } from 'uuid'
 
 export type Measurement = 'tsp' | 'g'
 
-interface CounterState {
+export interface CounterState {
   isEditGoalModalVisible: boolean
   isEditItemModalVisible: boolean
   initialItems: ItemObject[]
@@ -17,6 +18,7 @@ interface CounterState {
   calendar: CalendarEntry[]
   goal: number
   measurement: Measurement
+  counter: number
 }
 
 const { 
@@ -28,14 +30,14 @@ const initialItemsFromLocalStorage = getFromLocalStorage<ItemObject[]>('initialI
 const selectedItemsFromLocalStorage = getFromLocalStorage<ItemObject[]>('selectedItems') || []
 const lastSavedDateFromLocalStorage = getFromLocalStorage<string>('lastModifiedTimestamp')
 const dateObject = {date: new Date().toLocaleDateString()}
-const initialCalendar: CalendarEntry[] = Array.from({ length: 7 }, (_, index) => {
+export const initialCalendar: CalendarEntry[] = Array.from({ length: 7 }, (_, index) => {
   const currentDate = new Date()
   // calculate the date for each entry, starting from today's date and going backwards
   currentDate.setDate(currentDate.getDate() - (6 - index))
   return { 
     date: currentDate.toLocaleDateString(), 
     sugarCounter: null, 
-    id: self.crypto.randomUUID()
+    id: uuid()
   }
 })
 const calendarFromLocalStorage = getFromLocalStorage<CalendarEntry[]>('calendar') || initialCalendar
@@ -50,6 +52,7 @@ const initialState: CounterState = {
   calendar: calendarFromLocalStorage,
   goal: 25,
   measurement: 'g',
+  counter: 0,
 }
 
 const itemSlice = createSlice({
@@ -85,6 +88,8 @@ const itemSlice = createSlice({
       saveToLocalStorage('initialItems', state.initialItems)
       saveToLocalStorage('selectedItems', state.selectedItems)
       saveToLocalStorage('lastModifiedTimestamp', dateObject)
+      // update counter
+      state.counter = state.selectedItems.reduce((acc, currentValue)=> acc + currentValue.pieces * currentValue.sugarPerPiece, 0)
     },
     removeSelectedItem: (state, action: PayloadAction<string>) => {
       const removedItem = state.selectedItems.find(item => item.id === action.payload)
@@ -95,6 +100,8 @@ const itemSlice = createSlice({
         saveToLocalStorage('initialItems', state.initialItems)
         saveToLocalStorage('selectedItems', state.selectedItems)
         saveToLocalStorage('lastModifiedTimestamp', dateObject)
+        // update counter
+      state.counter = state.selectedItems.reduce((acc, currentValue)=> acc + currentValue.pieces * currentValue.sugarPerPiece, 0)
       }
     },
     addNewDayCustomItems: (state) => {
@@ -125,7 +132,7 @@ const itemSlice = createSlice({
         return {
           date: currentDate.toLocaleDateString(),
           sugarCounter: null,
-          id: self.crypto.randomUUID(),
+          id: uuid(),
         }
       })
       state.calendar = [...state.calendar, ...newArray].slice(-7)
@@ -134,7 +141,7 @@ const itemSlice = createSlice({
     editCalendarToday: (state, action: PayloadAction<number>) => {
       let newArray = [...state.calendar]
       newArray.pop()
-      newArray.push({ date: new Date().toLocaleDateString(), sugarCounter: action.payload, id: self.crypto.randomUUID() })
+      newArray.push({ date: new Date().toLocaleDateString(), sugarCounter: action.payload, id: uuid() })
       state.calendar = newArray
       saveToLocalStorage('calendar', state.calendar)
     },
@@ -159,7 +166,7 @@ export const {
   editCalendarYesterday,
   editCalendarToday,
   setGoal,
- switchMeasurement
+  switchMeasurement
  } 
  = itemSlice.actions
 export const itemReducer = itemSlice.reducer

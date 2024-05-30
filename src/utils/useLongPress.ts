@@ -10,7 +10,7 @@ export default function useLongPress() {
 
   function startPressTimer() {
     isLongPress.current = false
-    timerRef.current = setTimeout(() => {
+    timerRef.current = window.setTimeout(() => {
       isLongPress.current = true
       setAction('longpress')
     }, 500)
@@ -29,6 +29,7 @@ export default function useLongPress() {
 
   function handleOnMouseUp() {
     if (timerRef.current) clearTimeout(timerRef.current)
+    setAction(undefined)
   }
 
   function handleOnTouchStart() {
@@ -36,8 +37,8 @@ export default function useLongPress() {
   }
 
   function handleOnTouchEnd() {
-    if (action === 'longpress') return
     if (timerRef.current) clearTimeout(timerRef.current)
+    setAction(undefined)
   }
 
   return {

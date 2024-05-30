@@ -67,6 +67,7 @@ const Item: React.FC<ItemProps> = ( {id, name, emoji, description, selected=fals
         }}
         {...handlers}
         tabIndex={isEditItemModalVisible ? -1 : 0}
+        data-testid="item"
       >
         <span className="emoji">{emoji}</span>
           <div className="name">{name}</div>

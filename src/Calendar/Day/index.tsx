@@ -25,7 +25,7 @@ const Day: React.FC<DayProps> = ({sugarCounter, hasValue}) => {
 
   return (
     <>
-     <div className={`day ${hasValue ? ``: `day--disabled`}`} style={style}>
+     <div className={`day ${hasValue ? ``: `day--disabled`}`} style={style} data-testid="day-component">
       🍪
      </div>
     </>
