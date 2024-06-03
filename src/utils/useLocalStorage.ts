@@ -4,12 +4,13 @@ export default function useLocalStorage () {
     enum Key {
       LIST = 'list',
       DATE = 'date',
-      CALENDAR = 'calendar'
+      CALENDAR = 'calendar',
+      COUNTER = 'counter'
     }
     const storedData = localStorage.getItem(key)
   
     if (storedData) {
-      const result = JSON.parse(storedData)[Key.LIST] || JSON.parse(storedData)[Key.DATE] || JSON.parse(storedData)[Key.CALENDAR]
+      const result = JSON.parse(storedData)[Key.LIST] || JSON.parse(storedData)[Key.DATE] || JSON.parse(storedData)[Key.CALENDAR] || JSON.parse(storedData)[Key.COUNTER]
       if (result) {
         return result
       }
@@ -32,6 +33,10 @@ export default function useLocalStorage () {
       case 'calendar':
         const calendar = {calendar: data}
         localStorage.setItem(key, JSON.stringify(calendar))
+        break
+      case 'counter':
+        const counter = {counter: data}
+        localStorage.setItem(key, JSON.stringify(counter))
         break
     }
   }

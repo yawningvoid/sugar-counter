@@ -5,6 +5,7 @@
 	min-width: fit-content;
 	min-height: fit-content;
 	align-self: center;
+	position: relative;
 
 	&--disabled {
 	filter: grayscale(100%);
@@ -13,4 +14,14 @@
 	&--goal-success {
 		font-size: 60px;
 	}
+}
+
+.message {
+	position: absolute;
+	top: 60%;
+	right: 0;
+	height: 10px;
+	width: 10px;
+	border-radius: 50%;
+	border: 1.5px solid $neutral;
 }

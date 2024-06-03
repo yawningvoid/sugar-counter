@@ -9,6 +9,13 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  --neutral: #{$neutral};
+  --light: #{$light};
+  --light-2: #{$light-2};
+  --vivid: #{$vivid};
+  --vivid-2: #{$vivid-2};
+  --border-radius: #{$border-radius};
 }
 
 a {

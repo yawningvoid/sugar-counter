@@ -41,6 +41,7 @@ export const initialCalendar: CalendarEntry[] = Array.from({ length: 7 }, (_, in
   }
 })
 const calendarFromLocalStorage = getFromLocalStorage<CalendarEntry[]>('calendar') || initialCalendar
+const counterFromLocalStorage = getFromLocalStorage<number>('counter') || 0
 
 const initialState: CounterState = {
   isEditGoalModalVisible: false,
@@ -52,7 +53,7 @@ const initialState: CounterState = {
   calendar: calendarFromLocalStorage,
   goal: 25,
   measurement: 'g',
-  counter: 0,
+  counter: counterFromLocalStorage,
 }
 
 const itemSlice = createSlice({
@@ -80,6 +81,9 @@ const itemSlice = createSlice({
       saveToLocalStorage('initialItems', updatedinitialItems)
       saveToLocalStorage('selectedItems', updatedSelectedItems)
       saveToLocalStorage('lastModifiedTimestamp', dateObject)
+      // update counter
+      state.counter = state.selectedItems.reduce((acc, currentValue)=> acc + currentValue.pieces * currentValue.sugarPerPiece, 0)
+      saveToLocalStorage('counter', state.counter)
     },
     addSelectedItem: (state, action: PayloadAction<ItemObject>) => {
       state.selectedItems.push(action.payload)
@@ -90,6 +94,7 @@ const itemSlice = createSlice({
       saveToLocalStorage('lastModifiedTimestamp', dateObject)
       // update counter
       state.counter = state.selectedItems.reduce((acc, currentValue)=> acc + currentValue.pieces * currentValue.sugarPerPiece, 0)
+      saveToLocalStorage('counter', state.counter)
     },
     removeSelectedItem: (state, action: PayloadAction<string>) => {
       const removedItem = state.selectedItems.find(item => item.id === action.payload)
@@ -101,7 +106,8 @@ const itemSlice = createSlice({
         saveToLocalStorage('selectedItems', state.selectedItems)
         saveToLocalStorage('lastModifiedTimestamp', dateObject)
         // update counter
-      state.counter = state.selectedItems.reduce((acc, currentValue)=> acc + currentValue.pieces * currentValue.sugarPerPiece, 0)
+        state.counter = state.selectedItems.reduce((acc, currentValue)=> acc + currentValue.pieces * currentValue.sugarPerPiece, 0)
+        saveToLocalStorage('counter', state.counter)
       }
     },
     addNewDayCustomItems: (state) => {
@@ -118,6 +124,8 @@ const itemSlice = createSlice({
       saveToLocalStorage('initialItems', state.initialItems)
       saveToLocalStorage('selectedItems', [])
       saveToLocalStorage('lastModifiedTimestamp', dateObject)
+      // update counter
+      saveToLocalStorage('counter', 0)
     },
     setLastPressedItemId: (state, action: PayloadAction<string | null>) => {
       state.lastPressedItemId = action.payload
