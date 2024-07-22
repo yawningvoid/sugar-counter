@@ -40,7 +40,7 @@ const Item: React.FC<ItemProps> = ( {id, name, emoji, description, selected=fals
     } else if (action === 'longpress') {
       setDropdownVisible(true)
     }
-  }, [action])
+  }, [action, id, onClick])
 
   const handleEdit = (itemId : string) => {
     setDropdownVisible(false)

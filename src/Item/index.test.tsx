@@ -43,10 +43,10 @@ describe('Item', () => {
     renderWithProviders(<Item id="1" name="Candy" emoji="🍬" description="Sweet candy" selected onClick={mockOnClick} />, {
       preloadedState: {
         item: {
-					...mockState.item,
-					initialItems: mockInitialItems,
-					selectedItems: mockSelectedItems,
-				 },
+          ...mockState.item,
+          initialItems: mockInitialItems,
+          selectedItems: mockSelectedItems,
+         },
       },
     })
     fireEvent.mouseEnter(screen.getByTestId('item'))
@@ -82,10 +82,10 @@ describe('Item', () => {
     renderWithProviders(<Item id="2" name="Chocolate" emoji="🍫" description="Delicious chocolate" selected onClick={mockOnClick} />, {
       preloadedState: {
         item: {
-					...mockState.item,
-					 initialItems: mockInitialItems,
-					 selectedItems: mockSelectedItems,
-				 },
+          ...mockState.item,
+           initialItems: mockInitialItems,
+           selectedItems: mockSelectedItems,
+         },
       },
     })
 
@@ -103,10 +103,10 @@ describe('Item', () => {
     renderWithProviders(<Item id="2" name="Chocolate" emoji="🍫" description="Delicious chocolate" selected onClick={mockOnClick} />, {
       preloadedState: {
         item: {
-					...mockState.item,
-					 initialItems: mockInitialItems,
-					 selectedItems: mockSelectedItems,
-				 },
+          ...mockState.item,
+           initialItems: mockInitialItems,
+           selectedItems: mockSelectedItems,
+         },
       },
     })
 

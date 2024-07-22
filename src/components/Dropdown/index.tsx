@@ -2,7 +2,7 @@ import './index.scss'
 
 interface Buttons {
   label: string
-  onClick: (args?: any) => void
+  onClick: () => void
   show?: boolean
 }
 

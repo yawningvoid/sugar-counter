@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { ItemObject } from '../Item'
 import { initialItems } from './initialItems'
-import useLocalStorage from '../utils/useLocalStorage'
+import { getFromLocalStorage, saveToLocalStorage } from '../utils/useLocalStorage'
 import { CalendarEntry } from '../Calendar'
 import { differenceInCalendarDays } from "date-fns"
 import { v4 as uuid } from 'uuid'
@@ -20,11 +20,6 @@ export interface CounterState {
   measurement: Measurement
   counter: number
 }
-
-const { 
-  getFromLocalStorage, 
-  saveToLocalStorage 
-} = useLocalStorage()
 
 const initialItemsFromLocalStorage = getFromLocalStorage<ItemObject[]>('initialItems') || initialItems
 const selectedItemsFromLocalStorage = getFromLocalStorage<ItemObject[]>('selectedItems') || []
@@ -125,6 +120,7 @@ const itemSlice = createSlice({
       saveToLocalStorage('selectedItems', [])
       saveToLocalStorage('lastModifiedTimestamp', dateObject)
       // update counter
+      state.counter = 0
       saveToLocalStorage('counter', 0)
     },
     setLastPressedItemId: (state, action: PayloadAction<string | null>) => {
@@ -147,7 +143,7 @@ const itemSlice = createSlice({
       saveToLocalStorage('calendar', state.calendar)
     },
     editCalendarToday: (state, action: PayloadAction<number>) => {
-      let newArray = [...state.calendar]
+      const newArray = [...state.calendar]
       newArray.pop()
       newArray.push({ date: new Date().toLocaleDateString(), sugarCounter: action.payload, id: uuid() })
       state.calendar = newArray

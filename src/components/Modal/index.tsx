@@ -1,4 +1,4 @@
-import {  MouseEvent, useEffect } from 'react'
+import {  ChangeEvent, MouseEvent, useEffect, useMemo } from 'react'
 import './index.scss'
 
 interface FormField {
@@ -11,8 +11,8 @@ interface FormField {
 
 interface ModalProps {
   fields: FormField[]
-  onSubmit: (values: any) => void
-  onChange: (values: any) => void
+  onSubmit: () => void
+  onChange: (values: ChangeEvent<HTMLInputElement>) => void
   isModalVisible: boolean
   setModalVisible: () => void
   okButtonText: string
@@ -30,18 +30,18 @@ const Modal: React.FC<ModalProps> = ({ fields, onSubmit, onChange, isModalVisibl
     }
   }
 
-  const handleKeyEsc = (event: KeyboardEvent) => {
+  const handleKeyEsc = useMemo(() => (event: KeyboardEvent) => {
     if (event.key === 'Escape') {
-      setModalVisible()
+      setModalVisible() 
     }
-  }
+  }, [setModalVisible])
 
   useEffect (()=> {
     document.addEventListener('keyup', handleKeyEsc)
     return () => {
       document.removeEventListener('keyup', handleKeyEsc)
     }
-  }, [])
+  }, [handleKeyEsc])
 
   return (
     <>

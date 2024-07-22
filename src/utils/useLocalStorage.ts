@@ -1,6 +1,4 @@
-
-export default function useLocalStorage () {
-  function getFromLocalStorage<T>(key: string): T | null {
+  export function getFromLocalStorage<T>(key: string): T | null {
     enum Key {
       LIST = 'list',
       DATE = 'date',
@@ -19,30 +17,24 @@ export default function useLocalStorage () {
     return null
   }
   
-  function saveToLocalStorage<T>(key: string, data: T) {
+  export function saveToLocalStorage<T>(key: string, data: T) {
+    const setItem = (obj: Record<string, T | string>) => {
+      localStorage.setItem(key, JSON.stringify(obj))
+    }
+  
     switch (key) {
       case 'initialItems':
       case 'selectedItems':
-        const list = {list: data}
-        localStorage.setItem(key, JSON.stringify(list))
+        setItem({list: data})
         break
       case 'lastModifiedTimestamp':
-        const dateObject = {date: new Date().toLocaleDateString()}
-        localStorage.setItem(key, JSON.stringify(dateObject))
+        setItem({date: new Date().toLocaleDateString()})
         break
       case 'calendar':
-        const calendar = {calendar: data}
-        localStorage.setItem(key, JSON.stringify(calendar))
+        setItem({calendar: data})
         break
       case 'counter':
-        const counter = {counter: data}
-        localStorage.setItem(key, JSON.stringify(counter))
+        setItem({counter: data})
         break
     }
   }
-
-  return {
-    getFromLocalStorage,
-    saveToLocalStorage
-  }
-}   
