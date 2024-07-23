@@ -3,6 +3,7 @@
 A simple React-based application for tracking and managing daily sugar intake by adding sweet items.
 
 ## Table of Contents
+
 - [Introduction](#introduction)
 - [Features](#features)
 - [Usage](#usage)
@@ -28,13 +29,13 @@ This application allows users to monitor their daily sugar consumption by select
 2. **Search for Sweets:** Use the search bar to find specific sweet items.
 3. **Add and Remove Items:** Click on sweets to add them to the daily count. Click again to remove them.
 4. **Customize Items using Modal:**
+
    - Click on the three dots button on a sweet to open the menu.
    - Click on the "Edit" button to open the edit modal.
 
 5. **Edit Items:**
    - Modify the item name, description, grams of sugar per item, and the number of items consumed.
    - Click the "Save" button to apply changes or "Cancel" to discard them.
-
 
 ## Installation
 

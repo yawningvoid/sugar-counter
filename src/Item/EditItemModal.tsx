@@ -1,33 +1,48 @@
-import  { ItemObject } from '../Item/index'
+import { ItemObject } from '../Item/index'
 import Modal from '../components/Modal/index'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
-import { addSelectedItem, createItem, setEditItemModalVisible } from '../store/itemSlice'
+import {
+  addSelectedItem,
+  createItem,
+  setEditItemModalVisible,
+} from '../store/itemSlice'
 import { useEffect, useState, ChangeEvent, useMemo } from 'react'
 import { v4 as uuid } from 'uuid'
 
 function EditItemModal() {
-  const initialItems = useAppSelector(state => state.item.initialItems)
-  const selectedItems = useAppSelector(state => state.item.selectedItems)
-  const isEditItemModalVisible = useAppSelector(state => state.item.isEditItemModalVisible)
-  const lastPressedItemId = useAppSelector((state) => state.item.lastPressedItemId)
+  const initialItems = useAppSelector((state) => state.item.initialItems)
+  const selectedItems = useAppSelector((state) => state.item.selectedItems)
+  const isEditItemModalVisible = useAppSelector(
+    (state) => state.item.isEditItemModalVisible,
+  )
+  const lastPressedItemId = useAppSelector(
+    (state) => state.item.lastPressedItemId,
+  )
 
   const dispatch = useAppDispatch()
 
-  const shallowItem = useMemo(() => ({
-    id: '',
-    name: '',
-    description: '',
-    emoji: '',
-    sugarPerPiece: 0,
-    pieces: 0,
-    isInitial: false,
-  }), [])
+  const shallowItem = useMemo(
+    () => ({
+      id: '',
+      name: '',
+      description: '',
+      emoji: '',
+      sugarPerPiece: 0,
+      pieces: 0,
+      isInitial: false,
+    }),
+    [],
+  )
 
   const [itemToEdit, setItemToEdit] = useState<ItemObject>(shallowItem)
 
   useEffect(() => {
-    const itemInInitialItems = initialItems.find(item => item.id === lastPressedItemId)
-    const itemInSelectedItems = selectedItems.find(item => item.id === lastPressedItemId)
+    const itemInInitialItems = initialItems.find(
+      (item) => item.id === lastPressedItemId,
+    )
+    const itemInSelectedItems = selectedItems.find(
+      (item) => item.id === lastPressedItemId,
+    )
     setItemToEdit(itemInInitialItems ?? itemInSelectedItems ?? shallowItem)
   }, [lastPressedItemId, initialItems, selectedItems, shallowItem])
 
@@ -35,7 +50,8 @@ function EditItemModal() {
     const { id, value } = event.target
     setItemToEdit((prevItem) => ({
       ...prevItem,
-      [id]: id === 'sugarPerPiece' || id === 'pieces' ? parseInt(value, 10) : value,
+      [id]:
+        id === 'sugarPerPiece' || id === 'pieces' ? parseInt(value, 10) : value,
     }))
   }
 
@@ -77,13 +93,12 @@ function EditItemModal() {
     },
   ]
 
-      
   return (
-    <Modal 
-      fields={fieldsEditItem} 
-      onChange={handleInputChange} 
-      onSubmit={handleAddItem} 
-      isModalVisible={isEditItemModalVisible} 
+    <Modal
+      fields={fieldsEditItem}
+      onChange={handleInputChange}
+      onSubmit={handleAddItem}
+      isModalVisible={isEditItemModalVisible}
       setModalVisible={() => dispatch(setEditItemModalVisible())}
       okButtonText="Add item"
     />

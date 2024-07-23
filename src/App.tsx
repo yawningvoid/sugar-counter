@@ -1,7 +1,13 @@
 import './App.scss'
 import Item, { ItemObject } from './Item'
 import { useAppDispatch, useAppSelector } from './store/hooks'
-import { addNewDayCustomItems, addSelectedItem, editCalendarYesterday, removeSelectedItem, setEditGoalModalVisible } from './store/itemSlice'
+import {
+  addNewDayCustomItems,
+  addSelectedItem,
+  editCalendarYesterday,
+  removeSelectedItem,
+  setEditGoalModalVisible,
+} from './store/itemSlice'
 import { useState } from 'react'
 import Calendar from './Calendar'
 import EditItemModal from './Item/EditItemModal'
@@ -9,36 +15,44 @@ import EditGoalModal from './User/EditGoalModal'
 import Dropdown from './components/Dropdown'
 
 function App() {
-  const initialItems = useAppSelector(state => state.item.initialItems)
-  const selectedItems = useAppSelector(state => state.item.selectedItems)
-  const isEditGoalModalVisible = useAppSelector(state => state.item.isEditGoalModalVisible)
-  const isEditItemModalVisible = useAppSelector(state => state.item.isEditItemModalVisible)
-  const lastSavedDate = useAppSelector(state => state.item.lastSavedDate)
-  const measurement = useAppSelector(state => state.item.measurement)
-  const counter = useAppSelector(state => state.item.counter)
+  const initialItems = useAppSelector((state) => state.item.initialItems)
+  const selectedItems = useAppSelector((state) => state.item.selectedItems)
+  const isEditGoalModalVisible = useAppSelector(
+    (state) => state.item.isEditGoalModalVisible,
+  )
+  const isEditItemModalVisible = useAppSelector(
+    (state) => state.item.isEditItemModalVisible,
+  )
+  const lastSavedDate = useAppSelector((state) => state.item.lastSavedDate)
+  const measurement = useAppSelector((state) => state.item.measurement)
+  const counter = useAppSelector((state) => state.item.counter)
 
   const dispatch = useAppDispatch()
 
   const [searchQuery, setSearchQuery] = useState('')
   const [isDropdownVisible, setDropdownVisible] = useState(false)
   const buttons = [
-    {label: 'Goal', onClick: () => dispatch(setEditGoalModalVisible())},
-    {label: 'Profile', onClick: () => console.log('Profile is coming')},
+    { label: 'Goal', onClick: () => dispatch(setEditGoalModalVisible()) },
+    { label: 'Profile', onClick: () => console.log('Profile is coming') },
   ]
-  const filteredItems = initialItems.filter((item) => item.name.toLowerCase().includes(searchQuery.toLowerCase()))
+  const filteredItems = initialItems.filter((item) =>
+    item.name.toLowerCase().includes(searchQuery.toLowerCase()),
+  )
 
   const handleSelectItem = (itemId: string) => {
-    const itemToSelect: ItemObject | undefined = initialItems.find((item) => item.id === itemId)
+    const itemToSelect: ItemObject | undefined = initialItems.find(
+      (item) => item.id === itemId,
+    )
     if (itemToSelect) {
       if (lastSavedDate !== new Date().toLocaleDateString()) {
         dispatch(editCalendarYesterday())
         dispatch(addNewDayCustomItems())
-      } 
+      }
       // also has to run, user wants to have their item picked even if it's the next day
-        dispatch(addSelectedItem(itemToSelect))
+      dispatch(addSelectedItem(itemToSelect))
     }
   }
-  
+
   const handleDeselectItem = (itemId: string) => {
     if (lastSavedDate !== new Date().toLocaleDateString()) {
       dispatch(editCalendarYesterday())
@@ -47,63 +61,68 @@ function App() {
       dispatch(removeSelectedItem(itemId))
     }
   }
-      
+
   return (
     <div className="app">
-      {isEditGoalModalVisible && <EditGoalModal/>}
-      {isEditItemModalVisible && <EditItemModal/>}
+      {isEditGoalModalVisible && <EditGoalModal />}
+      {isEditItemModalVisible && <EditItemModal />}
       <div className="container">
         <div onMouseLeave={() => setDropdownVisible(false)}>
           <div className="avatar-container">
-            <div className="avatar" onClick={() => setDropdownVisible(!isDropdownVisible)}>
+            <div
+              className="avatar"
+              onClick={() => setDropdownVisible(!isDropdownVisible)}
+            >
               🙂
-              {isDropdownVisible && 
-                <Dropdown buttons={buttons}/>
-              }
+              {isDropdownVisible && <Dropdown buttons={buttons} />}
             </div>
           </div>
           <div className="calendar-counter-container">
-            <Calendar/>
-            <div className="counter">{counter} {measurement}</div>
+            <Calendar />
+            <div className="counter">
+              {counter} {measurement}
+            </div>
           </div>
         </div>
         <h1>What sweets did you have today?</h1>
-        <input 
+        <input
           id="search"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           placeholder="search"
           tabIndex={isEditGoalModalVisible || isEditItemModalVisible ? -1 : 0}
         />
-        { selectedItems.length > 0 &&
-        <div className="container-items">
-            {selectedItems.map((item)=> 
-              <Item 
-                selected 
-                key={item.id} 
+        {selectedItems.length > 0 && (
+          <div className="container-items">
+            {selectedItems.map((item) => (
+              <Item
+                selected
+                key={item.id}
                 id={item.id}
-                name={item.name} 
-                emoji={item.emoji} 
+                name={item.name}
+                emoji={item.emoji}
                 description={item.description}
-                onClick={()=> handleDeselectItem(item.id)} 
-              />)
-            }
+                onClick={() => handleDeselectItem(item.id)}
+              />
+            ))}
           </div>
-        } 
+        )}
         <p className="intro">
-          Choose the sweets you consumed today. Consider editing them based on the nutrition facts of your specific food, usually found on the package.    
+          Choose the sweets you consumed today. Consider editing them based on
+          the nutrition facts of your specific food, usually found on the
+          package.
         </p>
         <div className="container-items">
-          {filteredItems.map((item)=> 
-            <Item 
-              key={item.id} 
+          {filteredItems.map((item) => (
+            <Item
+              key={item.id}
               id={item.id}
-              name={item.name} 
-              emoji={item.emoji} 
+              name={item.name}
+              emoji={item.emoji}
               description={item.description}
-              onClick={()=> handleSelectItem(item.id)} 
-            />)
-          }
+              onClick={() => handleSelectItem(item.id)}
+            />
+          ))}
         </div>
       </div>
     </div>

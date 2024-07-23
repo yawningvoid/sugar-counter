@@ -11,7 +11,5 @@ module.exports = {
   },
   extensionsToTreatAsEsm: ['.ts', '.tsx'],
   testRunner: 'jest-circus/runner',
-  transformIgnorePatterns: [
-    'node_modules/(?!(uuid)/)',  
-  ],
+  transformIgnorePatterns: ['node_modules/(?!(uuid)/)'],
 }

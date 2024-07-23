@@ -4,14 +4,15 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 import listenerMiddleware from './listenerMiddleware'
 
 const rootReducer = combineReducers({
-  item: itemReducer
+  item: itemReducer,
 })
 
 export const setupStore = (preloadedState?: Partial<RootState>) => {
   return configureStore({
     reducer: rootReducer,
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware().prepend(listenerMiddleware.middleware),
-    preloadedState
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware().prepend(listenerMiddleware.middleware),
+    preloadedState,
   })
 }
 

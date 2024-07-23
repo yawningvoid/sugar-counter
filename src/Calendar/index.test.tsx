@@ -9,22 +9,22 @@ const mockCalendar: CalendarEntry[] = [
 ]
 
 interface RootState {
-  item: CounterState;
+  item: CounterState
 }
 
-export const mockState: RootState  = {
-	item: {
-		calendar: mockCalendar,
-		isEditGoalModalVisible: false,
-		isEditItemModalVisible: false,
-		initialItems: [],
-		selectedItems: [],
-		lastSavedDate: '',
-		lastPressedItemId: '',
-		measurement: 'g' as Measurement,
-		counter: 0,
-		goal: 0,
-	}
+export const mockState: RootState = {
+  item: {
+    calendar: mockCalendar,
+    isEditGoalModalVisible: false,
+    isEditItemModalVisible: false,
+    initialItems: [],
+    selectedItems: [],
+    lastSavedDate: '',
+    lastPressedItemId: '',
+    measurement: 'g' as Measurement,
+    counter: 0,
+    goal: 0,
+  },
 }
 
 describe('Calendar', () => {
@@ -34,9 +34,8 @@ describe('Calendar', () => {
 
   it('renders correct number of Day components', () => {
     renderWithProviders(<Calendar />, {
-      preloadedState: mockState
+      preloadedState: mockState,
     })
     expect(screen.getAllByTestId('day-component')).toHaveLength(2)
   })
 })
-

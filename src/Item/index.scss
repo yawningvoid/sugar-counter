@@ -13,22 +13,21 @@
   padding: 0;
   color: black;
   position: relative;
-  -webkit-user-select: none; 
-  -moz-user-select: none;    
-  -ms-user-select: none;     
-  user-select: none;         
-  -webkit-tap-highlight-color: transparent; 
-  
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+
   &:hover {
     background-color: $light-2;
     border: 3px solid $vivid-2;
   }
-  
+
   &--disabled {
     color: $vivid;
     filter: saturate(5%);
-    
-    
+
     &:hover {
       border: 3px solid $vivid;
       filter: saturate(100%);
@@ -41,7 +40,7 @@
     top: 5px;
     right: 5px;
     cursor: pointer;
-  
+
     &:hover {
       color: $vivid-2;
     }

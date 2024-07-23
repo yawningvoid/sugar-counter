@@ -3,7 +3,8 @@ import { useState, useRef, SetStateAction } from 'react'
 type Action = 'longpress' | 'click' | undefined
 
 export default function useLongPress() {
-  const [action, setAction]: [Action, React.Dispatch<SetStateAction<Action>>] = useState()
+  const [action, setAction]: [Action, React.Dispatch<SetStateAction<Action>>] =
+    useState()
 
   const timerRef = useRef<number | undefined>()
   const isLongPress = useRef<boolean>(false)
@@ -48,7 +49,7 @@ export default function useLongPress() {
       onMouseDown: handleOnMouseDown,
       onMouseUp: handleOnMouseUp,
       onTouchStart: handleOnTouchStart,
-      onTouchEnd: handleOnTouchEnd
-    }
+      onTouchEnd: handleOnTouchEnd,
+    },
   }
 }

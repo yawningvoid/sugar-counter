@@ -6,7 +6,7 @@ describe('Dropdown', () => {
     const buttons = [
       { label: 'Button 1', onClick: jest.fn() },
       { label: 'Button 2', onClick: jest.fn() },
-      { label: 'Button 3', onClick: jest.fn(), show: false }
+      { label: 'Button 3', onClick: jest.fn(), show: false },
     ]
 
     const { container } = render(<Dropdown buttons={buttons} />)
@@ -18,7 +18,7 @@ describe('Dropdown', () => {
   it('calls the correct onClick handler when a button is clicked', () => {
     const buttons = [
       { label: 'Button 1', onClick: jest.fn() },
-      { label: 'Button 2', onClick: jest.fn() }
+      { label: 'Button 2', onClick: jest.fn() },
     ]
 
     const { getByText } = render(<Dropdown buttons={buttons} />)

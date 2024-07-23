@@ -6,14 +6,14 @@ interface DayProps {
   hasValue: boolean
 }
 
-const Day: React.FC<DayProps> = ({sugarCounter, hasValue}) => {
+const Day: React.FC<DayProps> = ({ sugarCounter, hasValue }) => {
   let fontSize = '30px'
   let backgroundColor = 'var(--vivid)'
-  const goal = useAppSelector(state => state.item.goal)
+  const goal = useAppSelector((state) => state.item.goal)
   if (sugarCounter) {
     if (sugarCounter && sugarCounter <= goal) {
       fontSize = '30px'
-    } else if (sugarCounter < goal*2) {
+    } else if (sugarCounter < goal * 2) {
       fontSize = '40px'
       backgroundColor = '#ffbe27'
     } else {
@@ -31,9 +31,13 @@ const Day: React.FC<DayProps> = ({sugarCounter, hasValue}) => {
 
   return (
     <>
-      <div className={`day ${hasValue ? ``: `day--disabled`}`} style={style} data-testid="day-component">
+      <div
+        className={`day ${hasValue ? '' : 'day--disabled'}`}
+        style={style}
+        data-testid="day-component"
+      >
         🍪
-        { hasValue && <div className="message" style={messageStyle}></div>}
+        {hasValue && <div className="message" style={messageStyle}></div>}
       </div>
     </>
   )

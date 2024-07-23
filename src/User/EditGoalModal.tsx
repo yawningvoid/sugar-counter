@@ -1,14 +1,22 @@
 import Modal, { RadioChangeEvent } from '../components/Modal/index'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
-import { Measurement, setEditGoalModalVisible, setGoal, switchMeasurement } from '../store/itemSlice'
+import {
+  Measurement,
+  setEditGoalModalVisible,
+  setGoal,
+  switchMeasurement,
+} from '../store/itemSlice'
 import { ChangeEvent, useState } from 'react'
 
 function EditGoalModal() {
-  const isEditGoalModalVisible = useAppSelector(state => state.item.isEditGoalModalVisible)
-  const initialGoal = useAppSelector(state => state.item.goal)
-  const initialMeasurement = useAppSelector(state => state.item.measurement)
+  const isEditGoalModalVisible = useAppSelector(
+    (state) => state.item.isEditGoalModalVisible,
+  )
+  const initialGoal = useAppSelector((state) => state.item.goal)
+  const initialMeasurement = useAppSelector((state) => state.item.measurement)
   const [goal, editGoal] = useState<number>(initialGoal)
-  const [measurement, setMeasurement] = useState<Measurement>(initialMeasurement)
+  const [measurement, setMeasurement] =
+    useState<Measurement>(initialMeasurement)
 
   const dispatch = useAppDispatch()
 
@@ -42,25 +50,19 @@ function EditGoalModal() {
       type: 'radio',
       value: measurement,
       options: [
-        { label: 'g', 
-          onClick: handleRadioClick,
-          value: 'g'
-        },
-        { label: 'tsp', 
-          onClick: handleRadioClick,
-          value: 'tsp'
-        },
+        { label: 'g', onClick: handleRadioClick, value: 'g' },
+        { label: 'tsp', onClick: handleRadioClick, value: 'tsp' },
       ],
     },
   ]
-      
+
   return (
-    <Modal 
-      fields={fieldsEditGoal} 
-      onChange={handleInputChange} 
-      onSubmit={handleEditGoal} 
-      isModalVisible={isEditGoalModalVisible} 
-      setModalVisible={()=>dispatch(setEditGoalModalVisible())}
+    <Modal
+      fields={fieldsEditGoal}
+      onChange={handleInputChange}
+      onSubmit={handleEditGoal}
+      isModalVisible={isEditGoalModalVisible}
+      setModalVisible={() => dispatch(setEditGoalModalVisible())}
       okButtonText="Set goal"
       description="The recommended daily sugar intake varies, but generally, it's advised to limit added sugars to around 25g (5tsp) for women and 38g (8tsp) for men."
     />

@@ -18,9 +18,8 @@ export function renderWithProviders(
     preloadedState = {},
     store = setupStore(preloadedState),
     ...renderOptions
-  }: ExtendedRenderOptions = {}
+  }: ExtendedRenderOptions = {},
 ) {
-
   const Wrapper = ({ children }: PropsWithChildren) => (
     <Provider store={store}>{children}</Provider>
   )

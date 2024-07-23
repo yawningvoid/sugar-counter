@@ -1,11 +1,11 @@
 @import '../variables';
 
 .calendar {
-	display: flex;
-	min-width: 600px;
-	justify-content: space-between;
-	
-	@media (max-width: 750px) {
-		min-width: 100%;
-	}
+  display: flex;
+  min-width: 600px;
+  justify-content: space-between;
+
+  @media (max-width: 750px) {
+    min-width: 100%;
+  }
 }

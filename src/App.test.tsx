@@ -1,19 +1,40 @@
 import { renderWithProviders } from './utils/test-utils'
 import { fireEvent, screen } from '@testing-library/react'
 import App from './App'
-import { setEditGoalModalVisible, editCalendarYesterday, addNewDayCustomItems, addSelectedItem } from './store/itemSlice'
+import {
+  setEditGoalModalVisible,
+  editCalendarYesterday,
+  addNewDayCustomItems,
+  addSelectedItem,
+} from './store/itemSlice'
 import { mockState } from './Calendar/index.test'
 
 jest.mock('./store/hooks', () => ({
   ...jest.requireActual('./store/hooks'),
-  useAppDispatch: () => mockDispatch
+  useAppDispatch: () => mockDispatch,
 }))
 
 const mockDispatch = jest.fn()
 
-const mockInitialItems  = [
-  { id: '1', emoji: '🍬', name: 'Candy', sugarPerPiece: 5, pieces: 10, isInitial: true, description: 'Sweet candy' },
-  { id: '2', emoji: '🍫', name: 'Chocolate', sugarPerPiece: 10, pieces: 5, isInitial: false, description: 'Delicious chocolate' },
+const mockInitialItems = [
+  {
+    id: '1',
+    emoji: '🍬',
+    name: 'Candy',
+    sugarPerPiece: 5,
+    pieces: 10,
+    isInitial: true,
+    description: 'Sweet candy',
+  },
+  {
+    id: '2',
+    emoji: '🍫',
+    name: 'Chocolate',
+    sugarPerPiece: 10,
+    pieces: 5,
+    isInitial: false,
+    description: 'Delicious chocolate',
+  },
 ]
 
 describe('App', () => {
@@ -22,9 +43,15 @@ describe('App', () => {
   })
 
   it('renders correctly with initial state', () => {
-    renderWithProviders(<App />, { preloadedState:  { item: { ...mockState.item, initialItems: mockInitialItems }} })
+    renderWithProviders(<App />, {
+      preloadedState: {
+        item: { ...mockState.item, initialItems: mockInitialItems },
+      },
+    })
 
-    expect(screen.getByText('What sweets did you have today?')).toBeInTheDocument()
+    expect(
+      screen.getByText('What sweets did you have today?'),
+    ).toBeInTheDocument()
     expect(screen.getByPlaceholderText('search')).toBeInTheDocument()
     expect(screen.getAllByTestId('item')).toHaveLength(mockInitialItems.length)
   })
@@ -54,19 +81,31 @@ describe('App', () => {
   })
 
   it('handles selecting an item', async () => {
-    renderWithProviders(<App />, { preloadedState: { item: { ...mockState.item, initialItems: mockInitialItems }} })
+    renderWithProviders(<App />, {
+      preloadedState: {
+        item: { ...mockState.item, initialItems: mockInitialItems },
+      },
+    })
 
     const items = await screen.findAllByTestId('item')
-    const itemButton = items.find(item => item && item.textContent && item.textContent.includes('Chocolate')) // Add null check
+    const itemButton = items.find(
+      (item) =>
+        item && item.textContent && item.textContent.includes('Chocolate'),
+    ) // Add null check
     if (itemButton) {
-        fireEvent.click(itemButton)
+      fireEvent.click(itemButton)
     }
     expect(mockDispatch).toHaveBeenNthCalledWith(1, editCalendarYesterday())
     expect(mockDispatch).toHaveBeenNthCalledWith(2, addNewDayCustomItems())
-    
-    const selectedItem = mockInitialItems.find(item => item.name === 'Chocolate')
+
+    const selectedItem = mockInitialItems.find(
+      (item) => item.name === 'Chocolate',
+    )
     if (selectedItem) {
-        expect(mockDispatch).toHaveBeenNthCalledWith(3, addSelectedItem(selectedItem))
+      expect(mockDispatch).toHaveBeenNthCalledWith(
+        3,
+        addSelectedItem(selectedItem),
+      )
     }
   })
 })
