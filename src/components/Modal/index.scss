@@ -1,34 +1,21 @@
 @import '../../variables';
 
-.overlay {
-  position: fixed;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.2);
-  z-index: 10;
-
-  &--disabled {
-    display: none;
-  }
-}
+html:has(dialog[open]) { overflow: hidden; }
 
 .modal {
   background-color: $light-2;
   border: 3px solid $vivid;
   border-radius: $border-radius;
   padding: 20px;
-  z-index: 20;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  display: flex;
   flex-direction: column;
   max-width: 500px;
   box-sizing: border-box;
+
+  &::backdrop {
+    background-color: black;
+    opacity: 35%;
+  }
 
   &-content {
     display: flex;

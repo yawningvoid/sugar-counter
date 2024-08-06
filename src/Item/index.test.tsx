@@ -1,11 +1,7 @@
 import { fireEvent, screen } from '@testing-library/react'
 import { renderWithProviders } from '../utils/test-utils'
 import Item, { ItemObject } from './index'
-import {
-  setEditItemModalVisible,
-  setLastPressedItemId,
-  removeItem,
-} from '../store/itemSlice'
+import { setLastPressedItemId, removeItem } from '../store/itemSlice'
 import { mockState } from '../Calendar/index.test'
 
 const mockInitialItems: ItemObject[] = [
@@ -152,7 +148,6 @@ describe('Item', () => {
 
     const editButton = await screen.findByText('Edit')
     fireEvent.click(editButton)
-    expect(mockDispatch).toHaveBeenCalledWith(setEditItemModalVisible())
     expect(mockDispatch).toHaveBeenCalledWith(setLastPressedItemId('2'))
   })
 

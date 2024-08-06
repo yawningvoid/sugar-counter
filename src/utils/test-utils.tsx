@@ -6,6 +6,7 @@ import { Provider } from 'react-redux'
 
 import { setupStore } from '../store/store'
 import type { AppStore, RootState } from '../store/store'
+import { DialogRefProvider } from '../context/Context'
 
 interface ExtendedRenderOptions extends Omit<RenderOptions, 'queries'> {
   preloadedState?: Partial<RootState>
@@ -21,7 +22,9 @@ export function renderWithProviders(
   }: ExtendedRenderOptions = {},
 ) {
   const Wrapper = ({ children }: PropsWithChildren) => (
-    <Provider store={store}>{children}</Provider>
+    <Provider store={store}>
+      <DialogRefProvider>{children}</DialogRefProvider>
+    </Provider>
   )
 
   return { store, ...render(ui, { wrapper: Wrapper, ...renderOptions }) }

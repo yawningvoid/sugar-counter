@@ -15,8 +15,6 @@ interface RootState {
 export const mockState: RootState = {
   item: {
     calendar: mockCalendar,
-    isEditGoalModalVisible: false,
-    isEditItemModalVisible: false,
     initialItems: [],
     selectedItems: [],
     lastSavedDate: '',

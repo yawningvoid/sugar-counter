@@ -2,7 +2,6 @@ import { renderWithProviders } from './utils/test-utils'
 import { fireEvent, screen } from '@testing-library/react'
 import App from './App'
 import {
-  setEditGoalModalVisible,
   editCalendarYesterday,
   addNewDayCustomItems,
   addSelectedItem,
@@ -68,16 +67,6 @@ describe('App', () => {
     fireEvent.click(avatar)
     expect(screen.queryByText('Goal')).not.toBeInTheDocument()
     expect(screen.queryByText('Profile')).not.toBeInTheDocument()
-  })
-
-  it('dispatches setEditGoalModalVisible when Goal is clicked', () => {
-    renderWithProviders(<App />, { preloadedState: mockState })
-
-    const avatar = screen.getByText('🙂')
-    fireEvent.click(avatar)
-    fireEvent.click(screen.getByText('Goal'))
-
-    expect(mockDispatch).toHaveBeenCalledWith(setEditGoalModalVisible())
   })
 
   it('handles selecting an item', async () => {

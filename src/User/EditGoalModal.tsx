@@ -1,17 +1,11 @@
 import Modal, { RadioChangeEvent } from '../components/Modal/index'
+import { useDialogRef } from '../context/useDialogRef'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
-import {
-  Measurement,
-  setEditGoalModalVisible,
-  setGoal,
-  switchMeasurement,
-} from '../store/itemSlice'
+import { Measurement, setGoal, switchMeasurement } from '../store/itemSlice'
 import { ChangeEvent, useState } from 'react'
 
 function EditGoalModal() {
-  const isEditGoalModalVisible = useAppSelector(
-    (state) => state.item.isEditGoalModalVisible,
-  )
+  const { editGoalDialogRef } = useDialogRef()
   const initialGoal = useAppSelector((state) => state.item.goal)
   const initialMeasurement = useAppSelector((state) => state.item.measurement)
   const [goal, editGoal] = useState<number>(initialGoal)
@@ -27,7 +21,7 @@ function EditGoalModal() {
   const handleEditGoal = () => {
     dispatch(switchMeasurement(measurement))
     dispatch(setGoal(goal))
-    dispatch(setEditGoalModalVisible())
+    editGoalDialogRef?.current?.close()
   }
 
   function handleRadioClick(event: RadioChangeEvent) {
@@ -61,10 +55,9 @@ function EditGoalModal() {
       fields={fieldsEditGoal}
       onChange={handleInputChange}
       onSubmit={handleEditGoal}
-      isModalVisible={isEditGoalModalVisible}
-      setModalVisible={() => dispatch(setEditGoalModalVisible())}
       okButtonText="Set goal"
       description="The recommended daily sugar intake varies, but generally, it's advised to limit added sugars to around 25g (5tsp) for women and 38g (8tsp) for men."
+      dialogRef={editGoalDialogRef}
     />
   )
 }

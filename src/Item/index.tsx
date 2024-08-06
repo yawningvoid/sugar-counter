@@ -1,13 +1,10 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import './index.scss'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
-import {
-  setLastPressedItemId,
-  removeItem,
-  setEditItemModalVisible,
-} from '../store/itemSlice'
+import { setLastPressedItemId, removeItem } from '../store/itemSlice'
 import Dropdown from '../components/Dropdown'
 import useLongPress from '../utils/useLongPress'
+import { useDialogRef } from '../context/useDialogRef'
 
 export interface ItemObject {
   id: string
@@ -35,9 +32,7 @@ const Item: React.FC<ItemProps> = ({
   const [isDropdownVisible, setDropdownVisible] = useState(false)
   const [isHovered, setHovered] = useState(false)
   const dispatch = useAppDispatch()
-  const isEditItemModalVisible = useAppSelector(
-    (state) => state.item.isEditItemModalVisible,
-  )
+  const { editItemDialogRef } = useDialogRef()
   const initialItems = useAppSelector((state) => state.item.initialItems)
   const selectedItems = useAppSelector((state) => state.item.selectedItems)
 
@@ -47,17 +42,23 @@ const Item: React.FC<ItemProps> = ({
 
   const threeVerticalDots = '\u22EE'
   const { action, handlers } = useLongPress()
+  const handleClick = useCallback(() => {
+    if (id) {
+      onClick(id)
+    }
+  }, [id, onClick])
+
   useEffect(() => {
     if (action === 'click') {
-      onClick(id ?? '')
+      handleClick()
     } else if (action === 'longpress') {
       setDropdownVisible(true)
     }
-  }, [action, id, onClick])
+  }, [action, handleClick])
 
   const handleEdit = (itemId: string) => {
     setDropdownVisible(false)
-    dispatch(setEditItemModalVisible())
+    editItemDialogRef?.current?.showModal()
     dispatch(setLastPressedItemId(itemId))
   }
   const handleDelete = (itemId: string) => {
@@ -83,7 +84,6 @@ const Item: React.FC<ItemProps> = ({
           setHovered(false)
         }}
         {...handlers}
-        tabIndex={isEditItemModalVisible ? -1 : 0}
         data-testid="item"
       >
         <span className="emoji">{emoji}</span>

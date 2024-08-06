@@ -8,8 +8,6 @@ import {
   editCalendarYesterday,
   removeItem,
   removeSelectedItem,
-  setEditGoalModalVisible,
-  setEditItemModalVisible,
   setGoal,
   setLastPressedItemId,
   switchMeasurement,
@@ -32,26 +30,6 @@ describe('Redux Store Integration Tests', () => {
 
   beforeEach(() => {
     store = setupStore()
-  })
-
-  it('should toggle edit goal modal visibility', () => {
-    store.dispatch(setEditGoalModalVisible())
-    let state: RootState = store.getState()
-    expect(state.item.isEditGoalModalVisible).toBe(true)
-
-    store.dispatch(setEditGoalModalVisible())
-    state = store.getState()
-    expect(state.item.isEditGoalModalVisible).toBe(false)
-  })
-
-  it('should toggle edit item modal visibility', () => {
-    store.dispatch(setEditItemModalVisible())
-    let state: RootState = store.getState()
-    expect(state.item.isEditItemModalVisible).toBe(true)
-
-    store.dispatch(setEditItemModalVisible())
-    state = store.getState()
-    expect(state.item.isEditItemModalVisible).toBe(false)
   })
 
   it('should add a new item', () => {
@@ -91,12 +69,10 @@ describe('Redux Store Integration Tests', () => {
 
     store.dispatch(createItem(newItem1))
     store.dispatch(createItem(newItem2))
-    store.dispatch(setEditGoalModalVisible())
 
     const state: RootState = store.getState()
     expect(state.item.initialItems).toContainEqual(newItem1)
     expect(state.item.initialItems).toContainEqual(newItem2)
-    expect(state.item.isEditGoalModalVisible).toBe(true)
   })
 
   it('should remove an item', () => {

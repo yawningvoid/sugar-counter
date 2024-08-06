@@ -12,8 +12,6 @@ import { v4 as uuid } from 'uuid'
 export type Measurement = 'tsp' | 'g'
 
 export interface CounterState {
-  isEditGoalModalVisible: boolean
-  isEditItemModalVisible: boolean
   initialItems: ItemObject[]
   selectedItems: ItemObject[]
   lastPressedItemId: string | null
@@ -50,8 +48,6 @@ const calendarFromLocalStorage =
 const counterFromLocalStorage = getFromLocalStorage<number>('counter') || 0
 
 const initialState: CounterState = {
-  isEditGoalModalVisible: false,
-  isEditItemModalVisible: false,
   initialItems: initialItemsFromLocalStorage,
   selectedItems: selectedItemsFromLocalStorage,
   lastPressedItemId: null,
@@ -66,12 +62,6 @@ const itemSlice = createSlice({
   name: 'item',
   initialState,
   reducers: {
-    setEditGoalModalVisible: (state) => {
-      state.isEditGoalModalVisible = !state.isEditGoalModalVisible
-    },
-    setEditItemModalVisible: (state) => {
-      state.isEditItemModalVisible = !state.isEditItemModalVisible
-    },
     createItem: (state, action: PayloadAction<ItemObject>) => {
       state.initialItems.push(action.payload)
       state.lastSavedDate = new Date().toLocaleDateString()
@@ -206,8 +196,6 @@ const itemSlice = createSlice({
 
 export const {
   createItem,
-  setEditGoalModalVisible,
-  setEditItemModalVisible,
   removeSelectedItem,
   addSelectedItem,
   setLastPressedItemId,

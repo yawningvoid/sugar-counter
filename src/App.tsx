@@ -6,23 +6,18 @@ import {
   addSelectedItem,
   editCalendarYesterday,
   removeSelectedItem,
-  setEditGoalModalVisible,
 } from './store/itemSlice'
 import { useState } from 'react'
 import Calendar from './Calendar'
 import EditItemModal from './Item/EditItemModal'
 import EditGoalModal from './User/EditGoalModal'
 import Dropdown from './components/Dropdown'
+import { useDialogRef } from './context/useDialogRef'
 
 function App() {
   const initialItems = useAppSelector((state) => state.item.initialItems)
   const selectedItems = useAppSelector((state) => state.item.selectedItems)
-  const isEditGoalModalVisible = useAppSelector(
-    (state) => state.item.isEditGoalModalVisible,
-  )
-  const isEditItemModalVisible = useAppSelector(
-    (state) => state.item.isEditItemModalVisible,
-  )
+  const { editGoalDialogRef } = useDialogRef()
   const lastSavedDate = useAppSelector((state) => state.item.lastSavedDate)
   const measurement = useAppSelector((state) => state.item.measurement)
   const counter = useAppSelector((state) => state.item.counter)
@@ -32,7 +27,7 @@ function App() {
   const [searchQuery, setSearchQuery] = useState('')
   const [isDropdownVisible, setDropdownVisible] = useState(false)
   const buttons = [
-    { label: 'Goal', onClick: () => dispatch(setEditGoalModalVisible()) },
+    { label: 'Goal', onClick: () => editGoalDialogRef?.current?.showModal() },
     { label: 'Profile', onClick: () => console.log('Profile is coming') },
   ]
   const filteredItems = initialItems.filter((item) =>
@@ -64,8 +59,8 @@ function App() {
 
   return (
     <div className="app">
-      {isEditGoalModalVisible && <EditGoalModal />}
-      {isEditItemModalVisible && <EditItemModal />}
+      <EditGoalModal />
+      <EditItemModal />
       <div className="container">
         <div onMouseLeave={() => setDropdownVisible(false)}>
           <div className="avatar-container">
@@ -90,7 +85,6 @@ function App() {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           placeholder="search"
-          tabIndex={isEditGoalModalVisible || isEditItemModalVisible ? -1 : 0}
         />
         {selectedItems.length > 0 && (
           <div className="container-items">

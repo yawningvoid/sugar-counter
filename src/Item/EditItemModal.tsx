@@ -1,20 +1,15 @@
 import { ItemObject } from '../Item/index'
 import Modal from '../components/Modal/index'
+import { useDialogRef } from '../context/useDialogRef'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
-import {
-  addSelectedItem,
-  createItem,
-  setEditItemModalVisible,
-} from '../store/itemSlice'
+import { addSelectedItem, createItem } from '../store/itemSlice'
 import { useEffect, useState, ChangeEvent, useMemo } from 'react'
 import { v4 as uuid } from 'uuid'
 
 function EditItemModal() {
   const initialItems = useAppSelector((state) => state.item.initialItems)
   const selectedItems = useAppSelector((state) => state.item.selectedItems)
-  const isEditItemModalVisible = useAppSelector(
-    (state) => state.item.isEditItemModalVisible,
-  )
+  const { editItemDialogRef } = useDialogRef()
   const lastPressedItemId = useAppSelector(
     (state) => state.item.lastPressedItemId,
   )
@@ -63,7 +58,7 @@ function EditItemModal() {
     }
     dispatch(createItem(newItem))
     dispatch(addSelectedItem(newItem))
-    dispatch(setEditItemModalVisible())
+    editItemDialogRef?.current?.close()
   }
 
   const fieldsEditItem = [
@@ -98,9 +93,8 @@ function EditItemModal() {
       fields={fieldsEditItem}
       onChange={handleInputChange}
       onSubmit={handleAddItem}
-      isModalVisible={isEditItemModalVisible}
-      setModalVisible={() => dispatch(setEditItemModalVisible())}
       okButtonText="Add item"
+      dialogRef={editItemDialogRef}
     />
   )
 }
