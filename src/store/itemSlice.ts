@@ -46,6 +46,15 @@ export const initialCalendar: CalendarEntry[] = Array.from(
 const calendarFromLocalStorage =
   getFromLocalStorage<CalendarEntry[]>('calendar') || initialCalendar
 const counterFromLocalStorage = getFromLocalStorage<number>('counter') || 0
+const goalFromLocalStorage = getFromLocalStorage<number>('goal') || 25
+
+const measurementFromLocalStorage = getFromLocalStorage<Measurement>('measurement') || 'g'
+const TSP_TO_GRAMS = 5
+const convertCounter = (counter: number, measurement: Measurement): number => {
+  return measurement === 'tsp'
+    ? Math.round(counter / TSP_TO_GRAMS)
+    : Math.round(counter * TSP_TO_GRAMS)
+}
 
 const initialState: CounterState = {
   initialItems: initialItemsFromLocalStorage,
@@ -53,8 +62,8 @@ const initialState: CounterState = {
   lastPressedItemId: null,
   lastSavedDate: lastSavedDateFromLocalStorage,
   calendar: calendarFromLocalStorage,
-  goal: 25,
-  measurement: 'g',
+  goal: goalFromLocalStorage,
+  measurement: measurementFromLocalStorage,
   counter: counterFromLocalStorage,
 }
 
@@ -87,6 +96,9 @@ const itemSlice = createSlice({
           acc + currentValue.pieces * currentValue.sugarPerPiece,
         0,
       )
+      if (state.measurement === 'tsp') {
+        state.counter = convertCounter(state.counter, state.measurement)
+      }
       saveToLocalStorage('counter', state.counter)
     },
     addSelectedItem: (state, action: PayloadAction<ItemObject>) => {
@@ -104,6 +116,9 @@ const itemSlice = createSlice({
           acc + currentValue.pieces * currentValue.sugarPerPiece,
         0,
       )
+      if (state.measurement === 'tsp') {
+        state.counter = convertCounter(state.counter, state.measurement)
+      }
       saveToLocalStorage('counter', state.counter)
     },
     removeSelectedItem: (state, action: PayloadAction<string>) => {
@@ -125,6 +140,9 @@ const itemSlice = createSlice({
             acc + currentValue.pieces * currentValue.sugarPerPiece,
           0,
         )
+        if (state.measurement === 'tsp') {
+          state.counter = convertCounter(state.counter, state.measurement)
+        }
         saveToLocalStorage('counter', state.counter)
       }
     },
@@ -187,9 +205,14 @@ const itemSlice = createSlice({
     },
     setGoal: (state, action: PayloadAction<number>) => {
       state.goal = action.payload
+      saveToLocalStorage('goal', state.goal)
     },
     switchMeasurement: (state, action: PayloadAction<'tsp' | 'g'>) => {
       state.measurement = action.payload
+      saveToLocalStorage('measurement', state.measurement)
+      // update counter
+      state.counter = convertCounter(state.counter, state.measurement)
+      saveToLocalStorage('counter', state.counter)
     },
   },
 })

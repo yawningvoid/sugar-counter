@@ -76,7 +76,7 @@ function EditItemModal() {
     },
     {
       id: 'sugarPerPiece',
-      label: 'Amount of sugar per piece',
+      label: 'Amount of sugar per piece (g)',
       type: 'number',
       value: itemToEdit?.sugarPerPiece || 0,
     },
