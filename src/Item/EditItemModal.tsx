@@ -61,6 +61,10 @@ function EditItemModal() {
     editItemDialogRef?.current?.close()
   }
 
+  const handleCancel = () => {
+    editItemDialogRef?.current?.close()
+  }
+
   const fieldsEditItem = [
     {
       id: 'name',
@@ -93,6 +97,7 @@ function EditItemModal() {
       fields={fieldsEditItem}
       onChange={handleInputChange}
       onSubmit={handleAddItem}
+      onCancel={handleCancel}
       okButtonText="Add item"
       dialogRef={editItemDialogRef}
     />

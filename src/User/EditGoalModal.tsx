@@ -31,6 +31,10 @@ function EditGoalModal() {
     }
   }
 
+  const handleCancel = () => {
+    editGoalDialogRef?.current?.close()
+  }
+
   const fieldsEditGoal = [
     {
       id: 'goal',
@@ -54,6 +58,7 @@ function EditGoalModal() {
     <Modal
       fields={fieldsEditGoal}
       onChange={handleInputChange}
+      onCancel={handleCancel}
       onSubmit={handleEditGoal}
       okButtonText="Set goal"
       description="The recommended daily sugar intake varies, but generally, it's advised to limit added sugars to around 25g (5tsp) for women and 38g (8tsp) for men."

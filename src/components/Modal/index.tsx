@@ -13,9 +13,10 @@ interface FormField {
   }[]
 }
 
-interface ModalProps {
+export interface ModalProps {
   fields: FormField[]
   onSubmit: () => void
+  onCancel: () => void
   onChange: (values: ChangeEvent<HTMLInputElement>) => void
   okButtonText: string
   description?: string
@@ -29,6 +30,7 @@ export interface RadioChangeEvent extends MouseEvent<HTMLInputElement> {
 const Modal: React.FC<ModalProps> = ({
   fields,
   onSubmit,
+  onCancel,
   onChange,
   okButtonText,
   description,
@@ -83,7 +85,7 @@ const Modal: React.FC<ModalProps> = ({
           <button onClick={onSubmit} onKeyUp={handleKeyPress}>
             {okButtonText}
           </button>
-          <button onClick={() => dialogRef?.current?.close()}>Cancel</button>
+          <button onClick={onCancel}>Cancel</button>
         </div>
       </div>
     </dialog>
