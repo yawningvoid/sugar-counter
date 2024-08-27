@@ -75,34 +75,34 @@ const Item: React.FC<ItemProps> = ({
   ]
 
   return (
-    <>
-      <button
-        className={`item ${selected ? '' : 'item--disabled'}`}
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => {
-          setDropdownVisible(false)
-          setHovered(false)
-        }}
-        {...handlers}
-        data-testid="item"
-      >
-        <span className="emoji">{emoji}</span>
-        <div className="name">{name}</div>
-        <div className="description">{description}</div>
-        {isHovered && (
-          <div
-            className="item--actions"
-            onClick={(e) => {
-              e.stopPropagation()
-              setDropdownVisible((isDropdownVisible) => !isDropdownVisible)
-            }}
-          >
-            {threeVerticalDots}
-            {isDropdownVisible && <Dropdown buttons={buttons} />}
-          </div>
-        )}
-      </button>
-    </>
+    <button
+      className={`item ${selected ? '' : 'item--disabled'}`}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => {
+        setDropdownVisible(false)
+        setHovered(false)
+      }}
+      {...handlers}
+      data-testid="item"
+    >
+      <span className="emoji">{emoji}</span>
+      <div className="name">{name}</div>
+      <div className="description">{description}</div>
+      {isHovered && (
+        <div
+          className="item--actions"
+          onClick={(e) => {
+            e.stopPropagation()
+            setDropdownVisible((isDropdownVisible) => !isDropdownVisible)
+          }}
+          role="button"
+          aria-label="More options"
+        >
+          {threeVerticalDots}
+          {isDropdownVisible && <Dropdown buttons={buttons} />}
+        </div>
+      )}
+    </button>
   )
 }
 

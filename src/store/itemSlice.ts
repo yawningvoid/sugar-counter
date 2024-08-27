@@ -126,7 +126,7 @@ const itemSlice = createSlice({
         (item) => item.id === action.payload,
       )
       if (removedItem) {
-        state.initialItems.push(removedItem)
+        state.initialItems.unshift(removedItem)
         state.selectedItems = state.selectedItems.filter(
           (item) => item.id !== action.payload,
         )
@@ -175,20 +175,20 @@ const itemSlice = createSlice({
       const calendarDate = state.calendar[6].date
       const currentDate = new Date().toLocaleDateString()
       const daysDifference = differenceInCalendarDays(currentDate, calendarDate)
-      const newArray: CalendarEntry[] = Array.from(
-        { length: daysDifference },
-        (_, index) => {
-          const currentDate = new Date()
-          currentDate.setDate(
-            currentDate.getDate() - (daysDifference - (index + 1)),
-          )
-          return {
-            date: currentDate.toLocaleDateString(),
-            sugarCounter: null,
-            id: uuid(),
-          }
-        },
-      )
+      const newArray = Array.from({ length: daysDifference }, (_, index) => {
+        const currentDate = new Date()
+        currentDate.setDate(currentDate.getDate() - (daysDifference - (index + 1)))
+  
+        // if this is yesterday, check if we have a counter, otherwise set to null
+        const isYesterday = index === daysDifference - 1
+        const sugarCounter = isYesterday ? state.counter : null
+  
+        return {
+          date: currentDate.toLocaleDateString(),
+          sugarCounter,
+          id: uuid(),
+        }
+      })
       state.calendar = [...state.calendar, ...newArray].slice(-7)
       saveToLocalStorage('calendar', state.calendar)
     },

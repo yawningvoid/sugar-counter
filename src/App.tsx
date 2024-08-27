@@ -1,5 +1,5 @@
 import './App.scss'
-import Item, { ItemObject } from './Item'
+import Item from './Item'
 import { useAppDispatch, useAppSelector } from './store/hooks'
 import {
   addNewDayCustomItems,
@@ -7,7 +7,7 @@ import {
   editCalendarYesterday,
   removeSelectedItem,
 } from './store/itemSlice'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Calendar from './Calendar'
 import EditItemModal from './Item/EditItemModal'
 import EditGoalModal from './User/EditGoalModal'
@@ -34,28 +34,30 @@ function App() {
     item.name.toLowerCase().includes(searchQuery.toLowerCase()),
   )
 
+  const updateCalendarIfNeeded = () => {
+    if (lastSavedDate !== new Date().toLocaleDateString()) {
+      dispatch(editCalendarYesterday())
+      dispatch(addNewDayCustomItems())
+    }
+  }
+
   const handleSelectItem = (itemId: string) => {
-    const itemToSelect: ItemObject | undefined = initialItems.find(
-      (item) => item.id === itemId,
-    )
+    const itemToSelect = initialItems.find((item) => item.id === itemId)
     if (itemToSelect) {
-      if (lastSavedDate !== new Date().toLocaleDateString()) {
-        dispatch(editCalendarYesterday())
-        dispatch(addNewDayCustomItems())
-      }
-      // also has to run, user wants to have their item picked even if it's the next day
+      updateCalendarIfNeeded()
       dispatch(addSelectedItem(itemToSelect))
     }
   }
 
   const handleDeselectItem = (itemId: string) => {
-    if (lastSavedDate !== new Date().toLocaleDateString()) {
-      dispatch(editCalendarYesterday())
-      dispatch(addNewDayCustomItems())
-    } else {
-      dispatch(removeSelectedItem(itemId))
-    }
+    updateCalendarIfNeeded()
+    dispatch(removeSelectedItem(itemId))
   }
+
+  useEffect(() => {
+    updateCalendarIfNeeded()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <div className="app">
@@ -82,6 +84,7 @@ function App() {
         <h1>What sweets did you have today?</h1>
         <input
           id="search"
+          aria-label="Search sweets"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           placeholder="search"

@@ -12,7 +12,7 @@ interface DropdownProps {
 
 const Dropdown: React.FC<DropdownProps> = ({ buttons }) => {
   return (
-    <div className="dropdown">
+    <div className="dropdown" role="menu">
       {buttons.map(
         (button) =>
           button.show !== false && (
@@ -20,6 +20,7 @@ const Dropdown: React.FC<DropdownProps> = ({ buttons }) => {
               key={button.label}
               className="dropdown-button"
               onClick={() => button.onClick()}
+              role="menuitem"
             >
               {button.label}
             </div>

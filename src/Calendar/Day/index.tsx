@@ -15,7 +15,7 @@ const Day: React.FC<DayProps> = ({ sugarCounter, hasValue }) => {
       fontSize = '30px'
     } else if (sugarCounter < goal * 2) {
       fontSize = '40px'
-      backgroundColor = '#ffbe27'
+      backgroundColor = 'var(--light)'
     } else {
       fontSize = '50px'
       backgroundColor = 'var(--vivid-2)'
@@ -30,16 +30,16 @@ const Day: React.FC<DayProps> = ({ sugarCounter, hasValue }) => {
   }
 
   return (
-    <>
-      <div
-        className={`day ${hasValue ? '' : 'day--disabled'}`}
-        style={style}
-        data-testid="day-component"
-      >
-        🍪
-        {hasValue && <div className="message" style={messageStyle}></div>}
-      </div>
-    </>
+    <div
+      className={`day ${hasValue ? '' : 'day--disabled'}`}
+      style={style}
+      data-testid="day-component"
+      role="presentation"
+      aria-label={`Sugar counter: ${sugarCounter !== null ? sugarCounter : 'None'}`}
+    >
+      🍪
+      {hasValue && <div className="message" style={messageStyle}></div>}
+    </div>
   )
 }
 

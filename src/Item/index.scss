@@ -25,13 +25,11 @@
   }
 
   &--disabled {
-    color: $vivid;
-    filter: saturate(5%);
+    filter: opacity(80%);
 
     &:hover {
       border: 3px solid $vivid;
-      filter: saturate(100%);
-      color: black;
+      filter: opacity(100%);
     }
   }
 

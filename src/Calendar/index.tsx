@@ -11,17 +11,15 @@ const Calendar: React.FC = () => {
   const calendar = useAppSelector((state) => state.item.calendar)
 
   return (
-    <>
-      <div className="calendar">
-        {calendar.map((item) => (
-          <Day
-            sugarCounter={item.sugarCounter}
-            key={item.id}
-            hasValue={item.sugarCounter !== null}
-          />
-        ))}
-      </div>
-    </>
+    <div className="calendar">
+      {calendar.map((item) => (
+        <Day
+          sugarCounter={item.sugarCounter}
+          key={item.id}
+          hasValue={item.sugarCounter !== null}
+        />
+      ))}
+    </div>
   )
 }
 
