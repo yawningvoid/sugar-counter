@@ -56,6 +56,18 @@ const convertCounter = (counter: number, measurement: Measurement): number => {
     : Math.round(counter * TSP_TO_GRAMS)
 }
 
+const updateCounter = (state: CounterState) => {
+  const rawCounterInGrams = state.selectedItems.reduce(
+    (acc, currentValue) =>
+      acc + currentValue.pieces * currentValue.sugarPerPiece,
+    0,
+  )
+  state.counter = state.measurement === 'tsp'
+    ? Math.round(rawCounterInGrams / TSP_TO_GRAMS)
+    : rawCounterInGrams
+  saveToLocalStorage('counter', state.counter)
+}
+
 const initialState: CounterState = {
   initialItems: initialItemsFromLocalStorage,
   selectedItems: selectedItemsFromLocalStorage,
@@ -90,16 +102,7 @@ const itemSlice = createSlice({
       saveToLocalStorage('initialItems', updatedinitialItems)
       saveToLocalStorage('selectedItems', updatedSelectedItems)
       saveToLocalStorage('lastModifiedTimestamp', dateObject)
-      // update counter
-      state.counter = state.selectedItems.reduce(
-        (acc, currentValue) =>
-          acc + currentValue.pieces * currentValue.sugarPerPiece,
-        0,
-      )
-      if (state.measurement === 'tsp') {
-        state.counter = convertCounter(state.counter, state.measurement)
-      }
-      saveToLocalStorage('counter', state.counter)
+      updateCounter(state)
     },
     addSelectedItem: (state, action: PayloadAction<ItemObject>) => {
       state.selectedItems.push(action.payload)
@@ -110,16 +113,7 @@ const itemSlice = createSlice({
       saveToLocalStorage('initialItems', state.initialItems)
       saveToLocalStorage('selectedItems', state.selectedItems)
       saveToLocalStorage('lastModifiedTimestamp', dateObject)
-      // update counter
-      state.counter = state.selectedItems.reduce(
-        (acc, currentValue) =>
-          acc + currentValue.pieces * currentValue.sugarPerPiece,
-        0,
-      )
-      if (state.measurement === 'tsp') {
-        state.counter = convertCounter(state.counter, state.measurement)
-      }
-      saveToLocalStorage('counter', state.counter)
+      updateCounter(state)
     },
     removeSelectedItem: (state, action: PayloadAction<string>) => {
       const removedItem = state.selectedItems.find(
@@ -134,16 +128,7 @@ const itemSlice = createSlice({
         saveToLocalStorage('initialItems', state.initialItems)
         saveToLocalStorage('selectedItems', state.selectedItems)
         saveToLocalStorage('lastModifiedTimestamp', dateObject)
-        // update counter
-        state.counter = state.selectedItems.reduce(
-          (acc, currentValue) =>
-            acc + currentValue.pieces * currentValue.sugarPerPiece,
-          0,
-        )
-        if (state.measurement === 'tsp') {
-          state.counter = convertCounter(state.counter, state.measurement)
-        }
-        saveToLocalStorage('counter', state.counter)
+        updateCounter(state)
       }
     },
     addNewDayCustomItems: (state) => {
@@ -210,9 +195,16 @@ const itemSlice = createSlice({
     switchMeasurement: (state, action: PayloadAction<'tsp' | 'g'>) => {
       state.measurement = action.payload
       saveToLocalStorage('measurement', state.measurement)
-      // update counter
-      state.counter = convertCounter(state.counter, state.measurement)
-      saveToLocalStorage('counter', state.counter)
+      updateCounter(state)
+
+      // convert calendar
+      state.calendar = state.calendar.map((entry) => ({
+        ...entry,
+        sugarCounter: entry.sugarCounter !== null
+          ? convertCounter(entry.sugarCounter, state.measurement)
+          : null,
+      }))
+      saveToLocalStorage('calendar', state.calendar)
     },
   },
 })

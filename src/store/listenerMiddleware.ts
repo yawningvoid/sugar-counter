@@ -1,4 +1,4 @@
-import { RootState } from './store'
+import { AppStore, RootState } from './store'
 import {
   editCalendarToday,
   editCalendarYesterday,
@@ -21,7 +21,6 @@ listenerMiddleware.startListening({
     const state = listenerApi.getState() as RootState
     const lastSavedDate = state.item.lastSavedDate
     const today = new Date().toLocaleDateString()
-
     if (lastSavedDate !== today) {
       listenerApi.dispatch(editCalendarYesterday())
       listenerApi.dispatch(addNewDayCustomItems())
@@ -30,5 +29,17 @@ listenerMiddleware.startListening({
     }
   },
 })
+
+export const triggerInitialUpdate = (store: AppStore) => {
+  const state = store.getState() as RootState
+  const lastSavedDate = state.item.lastSavedDate
+  const today = new Date().toLocaleDateString()
+  if (lastSavedDate !== today) {
+    store.dispatch(editCalendarYesterday())
+    store.dispatch(addNewDayCustomItems())
+  } else {
+    store.dispatch(editCalendarToday(state.item.counter))
+  }
+}
 
 export default listenerMiddleware

@@ -7,7 +7,7 @@ import {
   editCalendarYesterday,
   removeSelectedItem,
 } from './store/itemSlice'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import Calendar from './Calendar'
 import EditItemModal from './Item/EditItemModal'
 import EditGoalModal from './User/EditGoalModal'
@@ -53,11 +53,6 @@ function App() {
     updateCalendarIfNeeded()
     dispatch(removeSelectedItem(itemId))
   }
-
-  useEffect(() => {
-    updateCalendarIfNeeded()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
 
   return (
     <div className="app">
