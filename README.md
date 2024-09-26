@@ -39,7 +39,7 @@ This application allows users to monitor their daily sugar consumption by select
 
 ## Installation
 
-1. Clone the repository: `git clone <repository-url>`
+1. Clone the repository: `git clone https://github.com/yawningvoid/sugar-counter.git`
 2. Install dependencies: `npm install`
 3. Run the application: `npm start`
 
